@@ -1,14 +1,15 @@
 import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { createContext, useEffect, useState } from "react";
 import app from "../Firebase/Firebase.config";
+import axios from "axios";
 
 
-export const AuthContext = createContext();
+export const AuthContext = createContext(null);
 const auth = getAuth(app);
-const googleProvider = new GoogleAuthProvider();
 
 const AuthProvider = ({ children }) => {
 
+    const googleProvider = new GoogleAuthProvider();
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -21,40 +22,11 @@ const AuthProvider = ({ children }) => {
         setLoading(true);
         return signInWithEmailAndPassword(auth, email, password)
     }
-    const handleGoogleSignIn = async () => {
-        try {
-            const result = await signInWithPopup(auth, googleProvider);
-            const loggedInUser = result.user;
-            setUser(loggedInUser);
-            console.log('Logged in with Google:', loggedInUser);
-            axios.post('https://library-management-server-tau.vercel.app/jwt', user, { withCredentials: true })
-                    .then(res => {
-                        console.log(res.data);
-                        if (res.data.success) {
-                            navigate(location?.state ? location?.state : '/')
-                        }
-                    })
-        } catch (error) {
-            console.error('Error signing in with Google:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
 
-    const handleGoogleSignOut = () => {
+    const googleSignIn = () => {
         setLoading(true);
-        signOut(auth)
-            .then(() => {
-                setUser(null);
-                console.log('Logged out from Google');
-            })
-            .catch(error => {
-                console.error('Error signing out from Google:', error);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
-    };
+        return signInWithPopup(auth, googleProvider);
+    }
 
     const logOut = () => {
         setLoading(true);
@@ -65,15 +37,27 @@ const AuthProvider = ({ children }) => {
         const unsubscribe = onAuthStateChanged(auth, currentUser =>{
             setUser(currentUser);
             console.log('current user', currentUser);
+            if(currentUser) {
+                const userInfo = {email: currentUser.email};
+                axios.post('https://library-management-server-tau.vercel.app/jwt',userInfo)
+                .then(res => {
+                    if(res.data.token) {
+                        localStorage.setItem('access-token', res.data.token)
+                    }
+                })
+            }
+            else {
+                localStorage.removeItem('access-token');
+            }
             setLoading(false);
         })
         return () => {
             return unsubscribe();
         }
-    }, [])
+    }, [axios])
 
     const authInfo = {
-        user, loading, createUser, handleGoogleSignIn, handleGoogleSignOut, signIn, logOut
+        user, loading, createUser, googleSignIn, signIn, logOut
     }
 
     return (

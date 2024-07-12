@@ -2,8 +2,9 @@ import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../Providers/AuthProvider";
 import { CgProfile } from "react-icons/cg";
+import { MdOutlineDarkMode } from "react-icons/md";
 
-const Navbar = () => {
+const Navbar = ({ handleTheme, theme }) => {
 
     const { user, logOut } = useContext(AuthContext);
     const [showTooltip, setShowTooltip] = useState(false);
@@ -22,7 +23,6 @@ const Navbar = () => {
         <li><Link to="/borrow">Borrowed Books</Link></li>
         <li><Link to="/login">Login</Link></li>
         <li><Link to="/about">About Us</Link></li>
-        <li><Link to="/history">History</Link></li>
     </>
 
     return (
@@ -45,11 +45,15 @@ const Navbar = () => {
                     </ul>
                 </div>
                 <div className="navbar-end">
+                    <div className="flex justify-end mr-4">
+                        <button onClick={handleTheme} className="btn bg-red-100 hover:bg-red-200">
+                            <MdOutlineDarkMode />
+                        </button>
+                    </div>
                     {user?.email ? <>
-                        <img className="w-11 mr-2 rounded-3xl" src={user?.photoURL} alt="" />
                         <div className="tooltip relative" onMouseEnter={() => setShowTooltip(true)} onMouseLeave={() => setShowTooltip(false)}>
                             <button className="btn bg-orange-100 hover:bg-orange-400">
-                                <CgProfile />
+                                <CgProfile></CgProfile>
                             </button>
                             {showTooltip &&
                                 <div className="tooltip-text absolute bg-base-200 text-base-content p-2 rounded-md shadow-md mt-2 w-auto">

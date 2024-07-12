@@ -29,8 +29,8 @@ const AllBooks = () => {
     };
 
     return (
-        <div>
-            <h3 className="text-2xl text-center font-semibold">All Books</h3>
+        <div className="bg-white dark:bg-slate-400">
+            <h3 className="text-2xl text-center py-2 font-semibold">All Books</h3>
             <div className="flex justify-end mb-3">
                 <button onClick={toggleView} className="btn bg-gray-200">{view === 'card' ? <FaTableList /> : <IoIosCard />}</button>
                 {view === 'card' && <button onClick={handleSort} className="btn btn-primary ml-3">Sort by Quantity</button>}
