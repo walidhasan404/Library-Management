@@ -3,7 +3,7 @@ const History = () => {
         <div className="m-6 bg-sky-50 p-4">
             <h2 className="text-3xl text-center font-bold mb-4">Our History</h2>
             <p>
-                LibraGenius was founded in [year] by [founder(s) name(s)] with a vision to create a vibrant online community dedicated to the celebration of literature and the joy of reading. Our journey began with a simple yet powerful idea: to connect book lovers from all walks of life and provide them with a platform to explore, discover, and share their passion for books. <br />
+                LibraGenius was founded in 2024 by Md. Olide Hasan with a vision to create a vibrant online community dedicated to the celebration of literature and the joy of reading. Our journey began with a simple yet powerful idea: to connect book lovers from all walks of life and provide them with a platform to explore, discover, and share their passion for books. <br />
                 <br />
 
                 Since our inception, LibraGenius has evolved into a thriving hub for bibliophiles worldwide. Over the years, we have grown our curated collection, expanded our community of readers, and forged partnerships with authors, publishers, and literary organizations to promote literacy and support the literary arts. <br />

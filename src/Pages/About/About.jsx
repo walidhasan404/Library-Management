@@ -1,6 +1,6 @@
 const About = () => {
     return (
-        <div className="m-6 bg-sky-50 p-4">
+        <div className="m-6 bg-sky-50 p-4 dark:bg-slate-500 dark:text-white">
             <h2 className="text-3xl text-center font-bold mb-3">About Us</h2>
             <p>Welcome to LibraGenius, your one-stop destination for all things related to books and reading! At LibraGenius, we are passionate about promoting literacy and fostering a love for reading among people of all ages and backgrounds. <br />
             <br />

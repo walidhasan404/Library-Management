@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../../../Providers/AuthProvider";
 import { CgProfile } from "react-icons/cg";
 import { MdOutlineDarkMode } from "react-icons/md";
+import { HashLink } from "react-router-hash-link";
 
 const Navbar = ({ handleTheme, theme }) => {
 
@@ -22,7 +23,7 @@ const Navbar = ({ handleTheme, theme }) => {
         <li><Link to="/added">All Added Books</Link></li>
         <li><Link to="/borrow">Borrowed Books</Link></li>
         <li><Link to="/login">Login</Link></li>
-        <li><Link to="/about">About Us</Link></li>
+        <li><HashLink smooth to="/#about">About Us</HashLink></li>
     </>
 
     return (
