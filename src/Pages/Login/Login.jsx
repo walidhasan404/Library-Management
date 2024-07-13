@@ -37,12 +37,11 @@ const Login = () => {
         signIn(email, password)
             .then(result => {
                 const loggedInUser = result.user;
-                console.log(loggedInUser);
                 const user = { email };
                 axios.post('https://library-management-server-tau.vercel.app/jwt', user, { withCredentials: true })
                     .then(res => {
-                        console.log(res.data);
                         if (res.data.success) {
+                            localStorage.setItem('token', res.data.token);  // Store token
                             navigate('/');
                         }
                     });
@@ -55,7 +54,6 @@ const Login = () => {
                 });
             })
             .catch(error => {
-                console.log(error);
                 Swal.fire({
                     icon: 'error',
                     title: 'Login Failed',
@@ -64,6 +62,8 @@ const Login = () => {
                 });
             });
     };
+
+
 
     const handleGoogleSignIn = () => {
         googleSignIn()

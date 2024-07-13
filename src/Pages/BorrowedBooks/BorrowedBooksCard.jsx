@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import ReactRating from 'react-rating';
 
 const BorrowedBooksCard = ({ book, handleReturn }) => {
