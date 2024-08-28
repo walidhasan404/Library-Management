@@ -23,12 +23,11 @@ const Navbar = ({ handleTheme, theme }) => {
         <li><Link to="/added">All Added Books</Link></li>
         <li><Link to="/borrow">Borrowed Books</Link></li>
         <li><Link to="/login">Login</Link></li>
-        <li><HashLink smooth to="/#about">About Us</HashLink></li>
     </>
 
     return (
         <div>
-            <div className="navbar bg-base-100">
+            <div className="navbar bg-base-100 p-2">
                 <div className="navbar-start">
                     <div className="dropdown">
                         <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -38,7 +37,7 @@ const Navbar = ({ handleTheme, theme }) => {
                             {navItems}
                         </ul>
                     </div>
-                    <a className="btn btn-ghost font-bold text-2xl">LibraGenius</a>
+                    <a className="font-bold text-lg md:text-xl lg:text-2xl">LibraGenius</a><img className="w-8 lg:ml-2" src="https://i.ibb.co/K5wQ7fD/download-26.jpg" alt="" />
                 </div>
                 <div className="navbar-center hidden lg:flex">
                     <ul className="menu menu-horizontal px-1">
@@ -53,8 +52,8 @@ const Navbar = ({ handleTheme, theme }) => {
                     </div>
                     {user?.email ? <>
                         <div className="tooltip relative" onMouseEnter={() => setShowTooltip(true)} onMouseLeave={() => setShowTooltip(false)}>
-                            <button className="btn bg-orange-100 hover:bg-orange-400">
-                                <CgProfile></CgProfile>
+                            <button className="w-10 mr-3">
+                                <img className="rounded-full lg:w-10 lg:h-10" src={user.photoURL} alt="" />
                             </button>
                             {showTooltip &&
                                 <div className="tooltip-text absolute bg-base-200 text-base-content p-2 rounded-md shadow-md mt-2 w-auto">
@@ -62,7 +61,7 @@ const Navbar = ({ handleTheme, theme }) => {
                                 </div>
                             }
                         </div>
-                        <li><button onClick={handleLogOut} className='btn bg-sky-400 hover:bg-sky-600 hover:text-white'>Log Out</button></li>
+                        <button onClick={handleLogOut} className='btn bg-sky-400 hover:bg-sky-600 hover:text-white'>Log Out</button>
                     </>
                         : <li><button className="btn bg-sky-400 hover:bg-sky-600 hover:text-white"><Link to="/login">Login</Link></button></li>}
                 </div>

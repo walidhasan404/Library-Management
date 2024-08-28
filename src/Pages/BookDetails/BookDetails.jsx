@@ -7,7 +7,7 @@ const BookDetails = () => {
     const book = useLoaderData();
     const { user } = useContext(AuthContext);
     const [isBorrowed, setIsBorrowed] = useState(false);
-    const { _id, image, quantity, author, category, description, rating } = book;
+    const { _id, image, author, category, description, rating } = book;
 
     useEffect(() => {
         const checkIfBorrowed = async () => {

@@ -64,10 +64,10 @@ const router = createBrowserRouter([
                 path: 'signup',
                 element: <Signup></Signup>
             },
-            // {
-            //     path: 'about',
-            //     element: <About></About>
-            // },
+            {
+                path: 'about',
+                element: <About></About>
+            },
             {
                 path: 'history',
                 element: <History></History>

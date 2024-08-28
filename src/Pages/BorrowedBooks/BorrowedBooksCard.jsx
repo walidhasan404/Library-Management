@@ -26,7 +26,6 @@ const BorrowedBooksCard = ({ book, handleReturn }) => {
                         <p><span className='text-lg font-medium'>Borrowed in:</span> {date}</p>
                         <p><span className='text-lg font-medium'>Return by:</span> {formattedReturnDate}</p>
                          <button className="btn btn-accent " onClick={()=>handleReturn(_id)}>Return</button>
-                        
                     </div>
                 </div>
             </div>
