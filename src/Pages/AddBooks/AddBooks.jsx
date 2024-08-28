@@ -1,12 +1,11 @@
 import React, { useContext } from 'react';
 import { AuthContext } from '../../Providers/AuthProvider';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 
 const AddBooks = () => {
-
     const { user } = useContext(AuthContext);
 
-    const handleAddBooks = event => {
+    const handleAddBooks = (event) => {
         event.preventDefault();
         const form = event.target;
         const name = form.name.value;
@@ -26,83 +25,73 @@ const AddBooks = () => {
             rating,
             image
         };
-        console.log(newBook);
 
-        fetch(`https://library-management-server-tau.vercel.app/added/${newBook._id}`, {
+        fetch('https://library-management-server-tau.vercel.app/added', {
             method: 'POST',
             headers: {
-                'content-type': 'application/json'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(newBook)
         })
-            .then(res => res.json())
-            .then(data => {
-                console.log(data);
+            .then((res) => res.json())
+            .then((data) => {
                 if (data.insertedId) {
                     Swal.fire({
-                        title: "Good job!",
-                        text: "This book added successfully",
+                        title: "Success!",
+                        text: "The book has been added successfully.",
                         icon: "success"
                     });
+                    form.reset();
                 }
+            })
+            .catch((error) => {
+                Swal.fire({
+                    title: "Error!",
+                    text: "There was an error adding the book. Please try again.",
+                    icon: "error"
+                });
             });
     };
 
-
     return (
-        <div>
-            <div className='mx-6 p-3 bg-sky-50'>
-                <h2 className='text-center text-3xl'>Add a Book</h2>
-                <form onSubmit={handleAddBooks}>
+        <div className="flex justify-center items-center min-h-screen bg-gray-50">
+            <div className="w-full max-w-2xl p-6 bg-white rounded-lg shadow-lg">
+                <h2 className="text-3xl font-semibold text-center text-gray-800 mb-6">Add a New Book</h2>
+                <form onSubmit={handleAddBooks} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="form-control">
-                            <label className="label">
-                                <span className="label-text">Name</span>
-                            </label>
-                            <input type="text" name="name" className="input input-bordered" placeholder="Book Name" />
+                            <label className="label text-gray-600 font-medium">Book Name</label>
+                            <input type="text" name="name" className="input input-bordered" placeholder="Enter book name" required />
                         </div>
                         <div className="form-control">
-                            <label className="label">
-                                <span className="label-text">Quantity</span>
-                            </label>
-                            <input type="number" name="quantity" className="input input-bordered" placeholder="Quantity" />
+                            <label className="label text-gray-600 font-medium">Quantity</label>
+                            <input type="number" name="quantity" className="input input-bordered" placeholder="Enter quantity" min="1" required />
                         </div>
                         <div className="form-control">
-                            <label className="label">
-                                <span className="label-text">Author</span>
-                            </label>
-                            <input type="text" name="author" className="input input-bordered" placeholder="Author Name" />
+                            <label className="label text-gray-600 font-medium">Author</label>
+                            <input type="text" name="author" className="input input-bordered" placeholder="Enter author name" required />
                         </div>
                         <div className="form-control">
-                            <label className="label">
-                                <span className="label-text">Category</span>
-                            </label>
-                            <input type="text" name="category" className="input input-bordered" placeholder="Category" />
+                            <label className="label text-gray-600 font-medium">Category</label>
+                            <input type="text" name="category" className="input input-bordered" placeholder="Enter category" required />
                         </div>
                     </div>
                     <div className="form-control">
-                        <label className="label">
-                            <span className="label-text">Short Description</span>
-                        </label>
-                        <textarea name="description" className="textarea textarea-bordered" rows="3" placeholder="Short Description"></textarea>
+                        <label className="label text-gray-600 font-medium">Short Description</label>
+                        <textarea name="description" className="textarea textarea-bordered" rows="3" placeholder="Enter a brief description" required></textarea>
                     </div>
                     <div className="form-control">
-                        <label className="label">
-                            <span className="label-text">Rating</span>
-                        </label>
-                        <input type="number" name="rating" min="1" max="5" className="input input-bordered" placeholder="Rating (1-5)" />
+                        <label className="label text-gray-600 font-medium">Rating</label>
+                        <input type="number" name="rating" min="1" max="5" className="input input-bordered" placeholder="Enter rating (1-5)" required />
                     </div>
                     <div className="form-control">
-                        <label className="label">
-                            <span className="label-text">Image URL</span>
-                        </label>
-                        <input type="text" name="image" className="input input-bordered" placeholder="Image URL" />
+                        <label className="label text-gray-600 font-medium">Image URL</label>
+                        <input type="text" name="image" className="input input-bordered" placeholder="Enter image URL" required />
                     </div>
                     <div className="form-control mt-6">
-                        <input className="btn btn-primary btn-block" type="submit" value="Add to Cart" />
+                        <button type="submit" className="btn btn-primary w-full text-lg">Add Book</button>
                     </div>
                 </form>
-
             </div>
         </div>
     );

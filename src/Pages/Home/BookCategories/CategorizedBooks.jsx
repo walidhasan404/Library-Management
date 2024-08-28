@@ -2,13 +2,23 @@ import { useLoaderData } from "react-router-dom";
 import BooksCard from "../../BooksCard2/BooksCard2";
 
 const CategorizedBooks = () => {
-
     const category = useLoaderData();
 
+    if (!category || category.length === 0) {
+        return (
+            <div className="p-6 bg-white rounded-lg shadow-md">
+                <h2 className="text-xl font-semibold text-center mb-4">No Books Found</h2>
+                <p className="text-center text-gray-600">No books available in this category at the moment.</p>
+            </div>
+        );
+    }
+
     return (
-        <div>
-            <h2 className="text-xl font-semibold text-center mb-4">Books in {category[0].category} category</h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mx-2 my-3">
+        <div className="p-6 bg-gray-50">
+            <h2 className="text-2xl font-semibold text-center mb-6 text-gray-800">
+                Books in <span className="text-blue-600">{category[0].category}</span> Category
+            </h2>
+            <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
                 {category.map(book => (
                     <BooksCard
                         key={book._id}
