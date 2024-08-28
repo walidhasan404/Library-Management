@@ -1,6 +1,6 @@
 # Library Management System
 
-**Live Site**: [Library Management System](https://library-management-86cd6.web.app)
+**Live Site**: [Library Management System](https://library-management-86cd6-e1cb9.web.app)
 
 ## Overview
 The Library Management System is a web application designed to streamline library operations. It helps in managing books, users, and borrowing records efficiently. The application is built using the MERN stack (MongoDB, Express.js, React.js, and Node.js).
