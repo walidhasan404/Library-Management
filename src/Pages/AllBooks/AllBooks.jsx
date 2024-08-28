@@ -29,14 +29,27 @@ const AllBooks = () => {
     };
 
     return (
-        <div className="bg-white dark:bg-slate-400">
-            <h3 className="text-2xl text-center py-2 font-semibold">All Books</h3>
-            <div className="flex justify-end mb-3">
-                <button onClick={toggleView} className="btn bg-gray-200">{view === 'card' ? <FaTableList /> : <IoIosCard />}</button>
-                {view === 'card' && <button onClick={handleSort} className="btn btn-primary ml-3">Sort by Quantity</button>}
+        <div className="bg-white dark:bg-slate-400 p-6 rounded-lg shadow-md">
+            <h3 className="text-3xl text-center py-4 font-bold text-gray-800 dark:text-white">Library Collection</h3>
+            <div className="flex justify-end mb-4">
+                <button 
+                    onClick={toggleView} 
+                    className="btn bg-gray-200 text-gray-800 hover:bg-gray-300 transition ease-in-out duration-200 p-2 rounded-md"
+                    aria-label={view === 'card' ? 'Switch to Table View' : 'Switch to Card View'}
+                >
+                    {view === 'card' ? <FaTableList /> : <IoIosCard />}
+                </button>
+                {view === 'card' && (
+                    <button 
+                        onClick={handleSort} 
+                        className="btn btn-primary ml-3 p-2 rounded-md text-white bg-blue-600 hover:bg-blue-700 transition ease-in-out duration-200"
+                    >
+                        Sort by Quantity
+                    </button>
+                )}
             </div>
             {view === 'card' ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mx-2 my-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {books.map(book => (
                         <BooksCard key={book._id} book={book} />
                     ))}
