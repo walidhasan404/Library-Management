@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from "react";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, Link } from "react-router-dom";
 import { AuthContext } from "../../Providers/AuthProvider";
 import axios from "axios";
 import { API_ENDPOINTS, dataTransformers } from "../../config/api";
@@ -82,13 +82,20 @@ const BookDetails = () => {
                     <p className="text-base font-medium">Category: <span className="text-sm font-normal">{category}</span></p>
                     <p className="text-base font-medium">Rating: <span className="text-sm font-normal">{rating}</span></p>
                     <p className="text-base font-medium">Quantity: <span className="text-sm font-normal">{book.quantity}</span></p>
-                    <button 
-                        className={`btn bg-sky-200 hover:bg-sky-400 my-2 ${isBorrowed ? 'cursor-not-allowed opacity-50' : ''}`} 
-                        onClick={handleBorrowBtn} 
-                        disabled={isBorrowed}
-                    >
-                        {isBorrowed ? 'Already Borrowed' : 'Borrow'}
-                    </button>
+                    <div className="flex gap-2 justify-center">
+                        <button 
+                            className={`btn bg-sky-200 hover:bg-sky-400 my-2 ${isBorrowed ? 'cursor-not-allowed opacity-50' : ''}`} 
+                            onClick={handleBorrowBtn} 
+                            disabled={isBorrowed}
+                        >
+                            {isBorrowed ? 'Already Borrowed' : 'Borrow'}
+                        </button>
+                        {user?.email && (
+                            <Link to={`/updateBook/${_id}`} className="btn bg-green-200 hover:bg-green-400 my-2">
+                                Update Book
+                            </Link>
+                        )}
+                    </div>
                 </div>
             </div>
 

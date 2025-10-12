@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { AuthContext } from "../../Providers/AuthProvider";
 import BorrowedBooksCard from "./BorrowedBooksCard";
 import axios from "axios";
@@ -61,6 +62,29 @@ const BorrowedBooks = () => {
 
     if (error) {
         return <div className="text-center text-red-500">{error}</div>;
+    }
+
+    // Show login prompt for non-authenticated users
+    if (!user) {
+        return (
+            <div className="p-8">
+                <h2 className="text-2xl text-center font-semibold mb-6">Your Borrowed Books</h2>
+                <div className="text-center">
+                    <div className="mb-6 p-6 bg-blue-50 border border-blue-200 rounded-lg max-w-md mx-auto">
+                        <h3 className="text-lg font-semibold text-blue-800 mb-2">Login Required</h3>
+                        <p className="text-blue-700 mb-4">
+                            Please log in to view and manage your borrowed books.
+                        </p>
+                        <Link 
+                            to="/login" 
+                            className="btn bg-blue-600 hover:bg-blue-700 text-white"
+                        >
+                            Go to Login
+                        </Link>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     return (

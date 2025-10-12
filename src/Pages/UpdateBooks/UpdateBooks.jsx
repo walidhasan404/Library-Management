@@ -1,5 +1,5 @@
 import Swal from 'sweetalert2'
-import { useLoaderData } from 'react-router-dom';
+import { useLoaderData, Link } from 'react-router-dom';
 import { API_ENDPOINTS } from '../../config/api';
 
 const UpdateBooks = () => {
@@ -9,6 +9,25 @@ const UpdateBooks = () => {
 
     const handleUpdateBook = event => {
         event.preventDefault();
+        
+        // Check if user is logged in
+        const token = localStorage.getItem('access-token');
+        if (!token) {
+            Swal.fire({
+                title: "Login Required",
+                text: "Please log in to update books.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Go to Login",
+                cancelButtonText: "Cancel"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/login';
+                }
+            });
+            return;
+        }
+
         const form = event.target;
         const image = form.image.value;
         const name = form.name.value;
@@ -24,7 +43,6 @@ const UpdateBooks = () => {
             rating: parseFloat(rating)
         };
         
-        const token = localStorage.getItem('access-token');
         fetch(API_ENDPOINTS.BOOK_BY_ID(_id), {
             method: 'PUT',
             headers: {
@@ -65,6 +83,16 @@ const UpdateBooks = () => {
     return (
         <div className="m-4 p-2 bg-blue-50">
             <h2 className="text-center text-xl font-semibold">Update this book</h2>
+            
+            <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <p className="text-yellow-800 text-center">
+                    <strong>Note:</strong> You need to be logged in to update books. 
+                    <Link to="/login" className="text-yellow-600 hover:underline ml-1">
+                        Click here to login
+                    </Link>
+                </p>
+            </div>
+            
             <form onSubmit={handleUpdateBook}>
                 <div>
                     <div className="flex gap-3 mb-4">

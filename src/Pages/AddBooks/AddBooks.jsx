@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { AuthContext } from '../../Providers/AuthProvider';
+import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { API_ENDPOINTS } from '../../config/api';
 
@@ -8,6 +9,25 @@ const AddBooks = () => {
 
     const handleAddBooks = (event) => {
         event.preventDefault();
+        
+        // Check if user is logged in
+        const token = localStorage.getItem('access-token');
+        if (!token) {
+            Swal.fire({
+                title: "Login Required",
+                text: "Please log in to add books to the library.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Go to Login",
+                cancelButtonText: "Cancel"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/login';
+                }
+            });
+            return;
+        }
+
         const form = event.target;
         const name = form.name.value;
         const quantity = parseInt(form.quantity.value);
@@ -28,7 +48,6 @@ const AddBooks = () => {
             publishedYear: null // Optional field
         };
 
-        const token = localStorage.getItem('access-token');
         fetch(API_ENDPOINTS.BOOKS, {
             method: 'POST',
             headers: {
@@ -67,6 +86,18 @@ const AddBooks = () => {
         <div className="flex justify-center items-center min-h-screen bg-gray-50">
             <div className="w-full max-w-2xl p-6 bg-white rounded-lg shadow-lg">
                 <h2 className="text-3xl font-semibold text-center text-gray-800 mb-6">Add a New Book</h2>
+                
+                {!user && (
+                    <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                        <p className="text-blue-800 text-center">
+                            <strong>Note:</strong> You need to be logged in to add books. 
+                            <Link to="/login" className="text-blue-600 hover:underline ml-1">
+                                Click here to login
+                            </Link>
+                        </p>
+                    </div>
+                )}
+                
                 <form onSubmit={handleAddBooks} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="form-control">
