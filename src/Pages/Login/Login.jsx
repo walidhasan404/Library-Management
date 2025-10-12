@@ -41,15 +41,16 @@ const Login = () => {
       await signIn(email, password);
       const { data } = await axios.post(
         API_ENDPOINTS.JWT,
-        { email },
+        { email, name: email.split('@')[0] },
         { withCredentials: true }
       );
       if (data.success) {
-        localStorage.setItem("token", data.token);
+        localStorage.setItem("access-token", data.data.token);
         Swal.fire("Welcome back!", "", "success");
         navigate("/");
       }
-    } catch {
+    } catch (error) {
+      console.error("Login error:", error);
       Swal.fire("Login failed", "Invalid credentials", "error");
     }
   };
@@ -63,11 +64,11 @@ const Login = () => {
       const { user } = await googleSignIn();
       const { data } = await axios.post(
         API_ENDPOINTS.JWT,
-        { email: user.email },
+        { email: user.email, name: user.displayName || user.email.split('@')[0] },
         { withCredentials: true }
       );
       if (data.success) {
-        localStorage.setItem("token", data.token);
+        localStorage.setItem("access-token", data.data.token);
         Swal.fire("Welcome back!", "", "success");
         navigate("/");
       }
