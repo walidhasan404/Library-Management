@@ -61,20 +61,70 @@ const Login = () => {
 
   const handleGoogleSignIn = async () => {
     try {
+      // Show loading state
+      Swal.fire({
+        title: 'Opening Google Sign-In...',
+        text: 'Please wait while we open the Google sign-in window.',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+
       const { user } = await googleSignIn();
+      
+      // Close loading
+      Swal.close();
+      
+      // Show success and process JWT
       const { data } = await axios.post(
         API_ENDPOINTS.JWT,
         { email: user.email, name: user.displayName || user.email.split('@')[0] },
         { withCredentials: true }
       );
+      
       if (data.success) {
         localStorage.setItem("access-token", data.data.token);
-        Swal.fire("Welcome back!", "", "success");
+        Swal.fire("Welcome back!", `Signed in as ${user.email}`, "success");
         navigate("/");
       }
     } catch (error) {
       console.error("Google Sign-In Error:", error);
-      Swal.fire("Google sign‑in failed", error.message || "Please try again", "error");
+      
+      // Close any open loading dialogs
+      Swal.close();
+      
+      // Show specific error messages
+      if (error.message.includes('Popup blocked')) {
+        Swal.fire({
+          title: 'Popup Blocked!',
+          html: `
+            <div class="text-left">
+              <p>Your browser blocked the Google sign-in popup.</p>
+              <br>
+              <p><strong>To fix this:</strong></p>
+              <ol class="list-decimal list-inside space-y-1 mt-2">
+                <li>Click the popup blocker icon in your browser's address bar</li>
+                <li>Select "Always allow popups from this site"</li>
+                <li>Refresh the page and try again</li>
+              </ol>
+              <br>
+              <p class="text-sm text-gray-600">Or try using a different browser.</p>
+            </div>
+          `,
+          icon: 'warning',
+          confirmButtonText: 'Try Again',
+          showCancelButton: true,
+          cancelButtonText: 'Cancel'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Retry after user acknowledges
+            setTimeout(() => handleGoogleSignIn(), 1000);
+          }
+        });
+      } else {
+        Swal.fire("Google sign‑in failed", error.message || "Please try again", "error");
+      }
     }
   };
 
@@ -165,6 +215,13 @@ const Login = () => {
             or
           </span>
           <hr className="flex-1 border-gray-300/50" />
+        </div>
+
+        {/* Google Sign-In Instructions */}
+        <div className="mb-2">
+          <p className="text-xs text-center text-gray-600 dark:text-gray-400">
+            💡 <strong>Tip:</strong> If popup is blocked, allow popups for this site
+          </p>
         </div>
 
         {/* Google */}

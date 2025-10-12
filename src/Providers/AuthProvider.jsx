@@ -24,9 +24,31 @@ const AuthProvider = ({ children }) => {
         return signInWithEmailAndPassword(auth, email, password)
     }
 
-    const googleSignIn = () => {
+    const googleSignIn = async () => {
         setLoading(true);
-        return signInWithPopup(auth, googleProvider);
+        try {
+            // Configure Google provider with additional options
+            googleProvider.setCustomParameters({
+                prompt: 'select_account'
+            });
+            
+            // Try popup first
+            const result = await signInWithPopup(auth, googleProvider);
+            return result;
+        } catch (error) {
+            console.error('Popup blocked or failed:', error);
+            
+            // If popup is blocked, show user-friendly message
+            if (error.code === 'auth/popup-blocked') {
+                throw new Error('Popup blocked! Please allow popups for this site and try again.');
+            } else if (error.code === 'auth/popup-closed-by-user') {
+                throw new Error('Sign-in was cancelled. Please try again.');
+            } else if (error.code === 'auth/cancelled-popup-request') {
+                throw new Error('Please wait for the current sign-in to complete.');
+            } else {
+                throw new Error(`Sign-in failed: ${error.message}`);
+            }
+        }
     }
 
     const logOut = () => {
