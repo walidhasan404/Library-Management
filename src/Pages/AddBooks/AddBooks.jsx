@@ -29,7 +29,7 @@ const AddBooks = () => {
         };
 
         const token = localStorage.getItem('access-token');
-        fetch(API_ENDPOINTS.ADD_BOOK, {
+        fetch(API_ENDPOINTS.BOOKS, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

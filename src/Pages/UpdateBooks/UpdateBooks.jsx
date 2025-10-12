@@ -1,10 +1,11 @@
 import Swal from 'sweetalert2'
 import { useLoaderData } from 'react-router-dom';
+import { API_ENDPOINTS } from '../../config/api';
 
 const UpdateBooks = () => {
 
     const updateBook = useLoaderData();
-    const { _id, image, name, author, category, rating } = updateBook;
+    const { _id, image, name, author_name, author, category, rating } = updateBook;
 
     const handleUpdateBook = event => {
         event.preventDefault();
@@ -18,29 +19,45 @@ const UpdateBooks = () => {
         const updatedBook = {
             image,
             name,
-            author,
+            author_name: author, // Backend expects author_name
             category,
-            rating
+            rating: parseFloat(rating)
         };
-        console.log(updatedBook);
-        fetch(`https://library-management-server-tau.vercel.app/book/${_id}`, {
+        
+        const token = localStorage.getItem('access-token');
+        fetch(API_ENDPOINTS.BOOK_BY_ID(_id), {
             method: 'PUT',
             headers: {
-                'content-type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(updatedBook)
         })
             .then(res => res.json())
             .then(data => {
-                console.log(data)
-                if (data.modifiedCount > 0) {
+                console.log(data);
+                if (data.success) {
                     Swal.fire({
                         title: "Good job!",
                         text: "This Book updated successfully",
                         icon: "success"
                     });
+                } else {
+                    Swal.fire({
+                        title: "Error!",
+                        text: data.message || "Failed to update the book",
+                        icon: "error"
+                    });
                 }
             })
+            .catch(error => {
+                console.error('Error updating book:', error);
+                Swal.fire({
+                    title: "Error!",
+                    text: "Failed to update the book. Please try again.",
+                    icon: "error"
+                });
+            });
 
     };
 
@@ -58,7 +75,7 @@ const UpdateBooks = () => {
                         </div>
                         <div className="w-1/2">
                             <label className="input input-bordered flex items-center w-full gap-2">
-                                <input name="author" defaultValue={author} type="text" className="grow" placeholder="Author Name" />
+                                <input name="author" defaultValue={author_name || author} type="text" className="grow" placeholder="Author Name" />
                             </label>
                         </div>
                     </div>

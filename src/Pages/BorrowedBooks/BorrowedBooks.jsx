@@ -33,7 +33,7 @@ const BorrowedBooks = () => {
             if (user?.email) {
                 const token = localStorage.getItem('access-token');
                 try {
-                    const response = await axios.get(API_ENDPOINTS.BORROWED_BOOKS, {
+                    const response = await axios.get(`${API_ENDPOINTS.BORROWED_BOOKS}?email=${user.email}`, {
                         headers: { Authorization: `Bearer ${token}` },
                         withCredentials: true
                     });
