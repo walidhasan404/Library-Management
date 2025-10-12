@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 
 const Banner = () => {
     const images = [
-        "https://i.ibb.co/ZzCmvXz/pexels-pixabay-159711.jpg",
         "https://i.ibb.co/TMbk7MP/pexels-pixabay-220326.jpg",
+        "https://i.ibb.co/ZzCmvXz/pexels-pixabay-159711.jpg",
         "https://i.ibb.co/JmzMs1Y/pexels-pixabay-159775.jpg",
         "https://i.ibb.co/7GsXzMB/pexels-pixabay-207732.jpg",
         "https://i.ibb.co/VV92fXY/pexels-ivo-rainha-527110-1261180.jpg"
@@ -26,7 +26,7 @@ const Banner = () => {
     };
 
     return (
-        <div className="relative w-full h-[60vh] overflow-hidden my-4">
+        <div className="relative w-full h-[80vh] overflow-hidden my-4">
             <div className="relative w-full h-full">
                 {images.map((src, index) => (
                     <motion.div

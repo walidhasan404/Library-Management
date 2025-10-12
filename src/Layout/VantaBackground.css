@@ -1,0 +1,59 @@
+.vanta-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: linear-gradient(135deg, #000011 0%, #000033 50%, #000011 100%);
+  overflow: hidden;
+}
+
+.stars {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(2px 2px at 20px 30px, #eee, transparent),
+    radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+    radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+    radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
+    radial-gradient(2px 2px at 160px 30px, #fff, transparent),
+    radial-gradient(1px 1px at 200px 20px, #fff, transparent),
+    radial-gradient(1px 1px at 250px 60px, rgba(255,255,255,0.7), transparent),
+    radial-gradient(1px 1px at 300px 40px, #fff, transparent);
+  background-repeat: repeat;
+  background-size: 300px 150px;
+  animation: twinkle 4s ease-in-out infinite alternate;
+}
+
+@keyframes twinkle {
+  0% { 
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  100% { 
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+/* Additional star field for depth */
+.stars::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(1px 1px at 50px 50px, #fff, transparent),
+    radial-gradient(1px 1px at 100px 100px, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 150px 25px, #fff, transparent),
+    radial-gradient(1px 1px at 200px 75px, rgba(255,255,255,0.8), transparent);
+  background-repeat: repeat;
+  background-size: 250px 125px;
+  animation: twinkle 6s ease-in-out infinite alternate-reverse;
+}

@@ -4,12 +4,12 @@ import BookCategories from "../BookCategories/BookCategories";
 
 const Home = () => {
     return (
-        <div className="bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-gray-200">
+        <div className="bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-200">
             <Banner />
             <section className="py-12">
                 <BookCategories />
             </section>
-            <div className="py-12 bg-white dark:bg-slate-700 rounded-lg shadow-lg">
+            <div className="py-8 bg-white dark:bg-slate-700 rounded-lg shadow-lg">
                 <About />
             </div>
         </div>

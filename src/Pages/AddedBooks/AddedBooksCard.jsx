@@ -2,7 +2,7 @@
 
 const AddedBooksCard = ({ book }) => {
 
-    const { _id, image, name, author, category, rating } = book;
+    const { _id, image, name, author_name, category, rating, status } = book;
     console.log(book);
     return (
         <div className="">
@@ -13,7 +13,8 @@ const AddedBooksCard = ({ book }) => {
                 <div className="card-body items-center text-center">
                     <h2 className="card-title">{name}</h2>
                     <p>{category}</p>
-                    <p>{author}</p>
+                    <p>{author_name}</p>
+                    <div className="badge badge-outline">{status}</div>
                 </div>
             </div>
         </div>

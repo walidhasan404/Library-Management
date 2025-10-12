@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../Providers/AuthProvider";
 import BorrowedBooksCard from "./BorrowedBooksCard";
 import axios from "axios";
+import { API_ENDPOINTS, dataTransformers } from "../../config/api";
 
 const BorrowedBooks = () => {
     const { user } = useContext(AuthContext);
@@ -11,7 +12,15 @@ const BorrowedBooks = () => {
 
     const handleReturn = async (id) => {
         try {
-            await axios.delete(`https://library-management-server-tau.vercel.app/delete/${id}`);
+            const token = localStorage.getItem('access-token');
+            await axios.patch(
+                API_ENDPOINTS.RETURN_BOOK(id),
+                {},
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                    withCredentials: true
+                }
+            );
             setBooks(prevBooks => prevBooks.filter(book => book._id !== id));
         } catch (err) {
             console.error('Error returning book:', err);
@@ -23,13 +32,15 @@ const BorrowedBooks = () => {
         const fetchBorrowedBooks = async () => {
             if (user?.email) {
                 const token = localStorage.getItem('access-token');
-                const url = `https://library-management-server-tau.vercel.app/borrow?email=${user.email}`;
                 try {
-                    const response = await axios.get(url, {
+                    const response = await axios.get(API_ENDPOINTS.BORROWED_BOOKS, {
                         headers: { Authorization: `Bearer ${token}` },
                         withCredentials: true
                     });
-                    setBooks(response.data);
+                    // Handle new backend response format
+                    const booksData = response.data.data || response.data;
+                    const transformedBooks = booksData.map(book => dataTransformers.transformBorrowedBook(book));
+                    setBooks(transformedBooks);
                 } catch (err) {
                     console.error('Error fetching borrowed books:', err);
                     setError('Failed to fetch borrowed books.');

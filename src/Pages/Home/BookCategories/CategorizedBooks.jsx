@@ -14,9 +14,9 @@ const CategorizedBooks = () => {
     }
 
     return (
-        <div className="p-6 bg-gray-50">
+        <div className="p-6 bg-white">
             <h2 className="text-2xl font-semibold text-center mb-6 text-gray-800">
-                Books in <span className="text-blue-600">{category[0].category}</span> Category
+                Books in <span className="text-blue-600">{category[0].category}</span> Department
             </h2>
             <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
                 {category.map(book => (

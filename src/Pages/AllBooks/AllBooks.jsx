@@ -3,16 +3,21 @@ import BooksCard from "./BooksCard";
 import BooksTable from "./BooksTable";
 import { FaTableList } from "react-icons/fa6";
 import { IoIosCard } from "react-icons/io";
+import { API_ENDPOINTS, dataTransformers } from "../../config/api";
 
 const AllBooks = () => {
     const [books, setBooks] = useState([]);
     const [view, setView] = useState('card');
 
     useEffect(() => {
-        fetch('https://library-management-server-tau.vercel.app/books')
+        // Fetch books from MongoDB database
+        fetch(API_ENDPOINTS.BOOKS)
             .then(res => res.json())
             .then(data => {
-                setBooks(data);
+                // Handle backend response format
+                const booksData = data.data || data; // Backend returns { success: true, data: [...] }
+                const transformedBooks = booksData.map(book => dataTransformers.transformBook(book));
+                setBooks(transformedBooks);
             })
             .catch(error => {
                 console.error('Error fetching books:', error);

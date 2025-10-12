@@ -2,26 +2,27 @@ import { useContext, useState, useEffect } from "react";
 import { useLoaderData } from "react-router-dom";
 import { AuthContext } from "../../Providers/AuthProvider";
 import axios from "axios";
+import { API_ENDPOINTS, dataTransformers } from "../../config/api";
 
 const BookDetails = () => {
     const book = useLoaderData();
     const { user } = useContext(AuthContext);
     const [isBorrowed, setIsBorrowed] = useState(false);
-    const { _id, image, name, author, category, description, rating } = book;
+    const { _id, image, name, author, author_name, category, description, rating } = book;
 
     useEffect(() => {
         const checkIfBorrowed = async () => {
             if (user?.email) {
                 try {
                     const token = localStorage.getItem('access-token');
-                    const response = await axios.get(`https://library-management-server-tau.vercel.app/borrow?email=${user.email}`, {
+                    const response = await axios.get(API_ENDPOINTS.BORROWED_BOOKS, {
                         headers: {
                             Authorization: `Bearer ${token}`
                         },
                         withCredentials: true
                     });
-                    const borrowedBooks = response.data;
-                    const isAlreadyBorrowed = borrowedBooks.some(borrowedBook => borrowedBook._id === _id);
+                    const borrowedBooks = response.data.data || response.data;
+                    const isAlreadyBorrowed = borrowedBooks.some(borrowedBook => borrowedBook.book === _id);
                     setIsBorrowed(isAlreadyBorrowed);
                 } catch (error) {
                     console.error('Error checking borrowed books:', error);
@@ -45,18 +46,13 @@ const BookDetails = () => {
         const email = user?.email;
 
         const borrowedBook = {
-            _id,
-            name,
+            bookId: _id,
             email,
-            date,
-            image,
-            author,
-            category,
-            rating,
+            returnDate: date,
         };
 
         try {
-            const response = await fetch(`https://library-management-server-tau.vercel.app/book/${_id}`, {
+            const response = await fetch(API_ENDPOINTS.BORROW_BOOK, {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json',
@@ -82,7 +78,7 @@ const BookDetails = () => {
                 <img className="mb-2 mx-auto w-96 h-96 object-cover" src={image} alt={name} />
                 <p className="text-center">{description}</p>
                 <div className="p-2 text-center">
-                    <p className="text-base font-medium">Author: <span className="text-sm font-normal">{author}</span></p>
+                    <p className="text-base font-medium">Author: <span className="text-sm font-normal">{author || author_name}</span></p>
                     <p className="text-base font-medium">Category: <span className="text-sm font-normal">{category}</span></p>
                     <p className="text-base font-medium">Rating: <span className="text-sm font-normal">{rating}</span></p>
                     <p className="text-base font-medium">Quantity: <span className="text-sm font-normal">{book.quantity}</span></p>

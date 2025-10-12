@@ -1,19 +1,30 @@
 const About = () => {
     return (
-        <div className="m-6 bg-sky-50 p-6 dark:bg-slate-500 dark:text-white rounded-lg shadow-md">
-            <h2 className="text-3xl text-center font-bold mb-4">About Us</h2>
-            <p className="text-lg leading-relaxed">
-                Welcome to LibraGenius, your premier destination for all things related to books and reading. At LibraGenius, we are dedicated to enhancing literacy and nurturing a love for reading across diverse age groups and backgrounds. <br /><br />
+        <div className="lg:m-6 m-3 bg-white p-4 lg:p-8 dark:bg-slate-700 dark:text-white">
+            <h2 className="text-4xl text-center font-extrabold mb-6 text-blue-700 dark:text-blue-300">About TechVerse</h2>
+            <p className="text-lg leading-relaxed font-medium text-gray-700 dark:text-gray-300">
+                Welcome to <span className="font-semibold text-blue-600 dark:text-blue-400">TechVerse</span> — the official digital platform managing the operations of the <strong>Sylhet Engineering College Library</strong>. This platform is designed to streamline and enhance the academic experience of students across all departments.
+                <br /><br />
 
-                Our mission is to offer a platform where book enthusiasts can discover new titles, explore a variety of genres, and connect with fellow readers globally. Whether you're a passionate reader seeking your next favorite book or a newcomer looking for recommendations, LibraGenius aims to inspire and guide you throughout your reading journey. <br /><br />
+                At TechVerse, we serve the four core departments of the institution:
+                <ul className="list-disc list-inside mt-2 ml-4">
+                    <li>CSE (Computer Science and Engineering)</li>
+                    <li>EEE (Electrical and Electronic Engineering)</li>
+                    <li>Civil Engineering</li>
+                    <li>Non-Tech Department</li>
+                </ul>
 
-                What distinguishes LibraGenius is our meticulously curated collection of books, chosen to cater to a broad spectrum of interests and tastes. From timeless classics to contemporary bestsellers, from thrilling mysteries to heartwarming romances, our extensive library ensures there is something for every reader. <br /><br />
+                <br />
+                Students can browse a wide range of academic and general books specific to their department. Through TechVerse, students can easily <strong>borrow books</strong> and are required to <strong>return them within a set period</strong>. This ensures efficient circulation and accessibility for all.
+                <br /><br />
 
-                More than just a bookstore, LibraGenius is committed to the transformative power of literature. We actively promote literacy initiatives, support authors, and advocate for the vital role of reading in our communities. <br /><br />
+                Our library is regularly updated with new titles and resources. The <strong>librarian (admin)</strong> manages all book additions and ensures the library stays up-to-date with the latest materials needed for academic success.
+                <br /><br />
 
-                We invite you to join us on this literary adventure. Explore our virtual shelves, participate in book clubs and discussions, and engage with our reading recommendations. Immerse yourself in the captivating world of books with LibraGenius. <br /><br />
+                Whether you're preparing for exams, working on a project, or just exploring knowledge, TechVerse is your one-stop solution to all things academic and literary at Sylhet Engineering College.
+                <br /><br />
 
-                Thank you for choosing LibraGenius as your trusted literary companion. Happy reading!
+                Thank you for using <span className="font-semibold text-blue-600 dark:text-blue-400">TechVerse</span>. Let’s read, learn, and grow together.
             </p>
         </div>
     );

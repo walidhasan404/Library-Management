@@ -2,6 +2,7 @@ import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, signInWith
 import { createContext, useEffect, useState } from "react";
 import app from "../Firebase/Firebase.config";
 import axios from "axios";
+import { API_ENDPOINTS } from "../config/api";
 
 
 export const AuthContext = createContext(null);
@@ -39,11 +40,14 @@ const AuthProvider = ({ children }) => {
             console.log('current user', currentUser);
             if(currentUser) {
                 const userInfo = {email: currentUser.email};
-                axios.post('https://library-management-server-tau.vercel.app/jwt',userInfo)
+                axios.post(API_ENDPOINTS.JWT, userInfo)
                 .then(res => {
-                    if(res.data.token) {
-                        localStorage.setItem('access-token', res.data.token)
+                    if(res.data.data && res.data.data.token) {
+                        localStorage.setItem('access-token', res.data.data.token)
                     }
+                })
+                .catch(error => {
+                    console.error('JWT generation failed:', error);
                 });
             }
             else {

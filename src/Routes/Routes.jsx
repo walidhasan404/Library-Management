@@ -27,7 +27,7 @@ const router = createBrowserRouter([
             },
             {
                 path: 'all',
-                element: <PrivateRoute><AllBooks></AllBooks></PrivateRoute>
+                element: <AllBooks></AllBooks>,
             },
             {
                 path: 'add',

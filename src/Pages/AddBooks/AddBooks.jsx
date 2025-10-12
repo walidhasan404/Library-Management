@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { AuthContext } from '../../Providers/AuthProvider';
 import Swal from 'sweetalert2';
+import { API_ENDPOINTS } from '../../config/api';
 
 const AddBooks = () => {
     const { user } = useContext(AuthContext);
@@ -18,30 +19,39 @@ const AddBooks = () => {
 
         const newBook = {
             name,
-            quantity,
-            author,
+            author_name: author, // Backend expects author_name
             category,
             description,
             rating,
-            image
+            image,
+            isbn: '', // Optional field
+            publishedYear: null // Optional field
         };
 
-        fetch('https://library-management-server-tau.vercel.app/added', {
+        const token = localStorage.getItem('access-token');
+        fetch(API_ENDPOINTS.ADD_BOOK, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(newBook)
         })
             .then((res) => res.json())
             .then((data) => {
-                if (data.insertedId) {
+                if (data.success) {
                     Swal.fire({
                         title: "Success!",
                         text: "The book has been added successfully.",
                         icon: "success"
                     });
                     form.reset();
+                } else {
+                    Swal.fire({
+                        title: "Error!",
+                        text: data.message || "There was an error adding the book. Please try again.",
+                        icon: "error"
+                    });
                 }
             })
             .catch((error) => {

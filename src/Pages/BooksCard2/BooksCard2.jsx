@@ -5,7 +5,7 @@ const BooksCard = ({ book }) => {
     const { _id, image, name, author, category, rating } = book;
 
     return (
-        <div className="card w-full max-w-xs bg-white shadow-lg rounded-lg overflow-hidden">
+        <div className="card w-full max-w-xs bg-white border-2 rounded-lg overflow-hidden">
             <figure className="relative">
                 <img src={image} alt={`${name} cover`} className="w-full h-60 object-cover rounded-t-lg" />
             </figure>
