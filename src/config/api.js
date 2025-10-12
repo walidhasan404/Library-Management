@@ -1,8 +1,8 @@
 // API Configuration for Library Management Frontend
 // Updated to work with new structured backend
 
-// Base API URL - Update this to your new Vercel deployment URL
-const API_BASE_URL = 'https://library-management-server-p1n8x5zon-md-olide-hasans-projects.vercel.app';
+// Base API URL - Updated to new Vercel deployment
+const API_BASE_URL = 'https://library-management-server-taupe-nine.vercel.app';
 
 // API Endpoints
 export const API_ENDPOINTS = {
