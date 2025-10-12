@@ -1,12 +1,40 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../Providers/AuthProvider";
 import { MdOutlineDarkMode } from "react-icons/md";
+import axios from "axios";
+import { API_ENDPOINTS } from "../../../config/api";
 
 const Navbar = ({ handleTheme, theme }) => {
 
     const { user, logOut } = useContext(AuthContext);
     const [showTooltip, setShowTooltip] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
+
+    // Check if user is admin
+    useEffect(() => {
+        const checkAdminStatus = async () => {
+            if (user?.email) {
+                const token = localStorage.getItem('access-token');
+                try {
+                    const response = await axios.get(
+                        API_ENDPOINTS.CHECK_ADMIN(user.email),
+                        {
+                            headers: { Authorization: `Bearer ${token}` }
+                        }
+                    );
+                    setIsAdmin(response.data.data.admin);
+                } catch (error) {
+                    console.error('Error checking admin status:', error);
+                    setIsAdmin(false);
+                }
+            } else {
+                setIsAdmin(false);
+            }
+        };
+
+        checkAdminStatus();
+    }, [user?.email]);
 
     const handleLogOut = () => {
         logOut()
@@ -24,6 +52,13 @@ const Navbar = ({ handleTheme, theme }) => {
                 <li><Link to="/add">Add Books</Link></li>
                 <li><Link to="/added">All Added Books</Link></li>
                 <li><Link to="/borrow">Borrowed Books</Link></li>
+                {isAdmin && (
+                    <li>
+                        <Link to="/admin-users" className="text-orange-600 font-semibold">
+                            Admin Panel
+                        </Link>
+                    </li>
+                )}
             </>
         )}
 
