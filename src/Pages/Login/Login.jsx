@@ -11,6 +11,7 @@ import {
   LoadCanvasTemplate,
   validateCaptcha,
 } from "react-simple-captcha";
+import { API_ENDPOINTS } from "../../config/api";
 
 const Login = () => {
   const { signIn, googleSignIn, logOut, loggedInUser } = useContext(AuthContext);
@@ -39,7 +40,7 @@ const Login = () => {
     try {
       await signIn(email, password);
       const { data } = await axios.post(
-        "https://library-management-server-tau.vercel.app/jwt",
+        API_ENDPOINTS.JWT,
         { email },
         { withCredentials: true }
       );
@@ -61,7 +62,7 @@ const Login = () => {
     try {
       const { user } = await googleSignIn();
       const { data } = await axios.post(
-        "https://library-management-server-tau.vercel.app/jwt",
+        API_ENDPOINTS.JWT,
         { email: user.email },
         { withCredentials: true }
       );
@@ -70,8 +71,9 @@ const Login = () => {
         Swal.fire("Welcome back!", "", "success");
         navigate("/");
       }
-    } catch {
-      Swal.fire("Google sign‑in failed", "", "error");
+    } catch (error) {
+      console.error("Google Sign-In Error:", error);
+      Swal.fire("Google sign‑in failed", error.message || "Please try again", "error");
     }
   };
 
