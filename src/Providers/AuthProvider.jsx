@@ -39,7 +39,10 @@ const AuthProvider = ({ children }) => {
             setUser(currentUser);
             console.log('current user', currentUser);
             if(currentUser) {
-                const userInfo = {email: currentUser.email};
+                const userInfo = {
+                    email: currentUser.email,
+                    name: currentUser.displayName || currentUser.email.split('@')[0]
+                };
                 axios.post(API_ENDPOINTS.JWT, userInfo)
                 .then(res => {
                     if(res.data.data && res.data.data.token) {
