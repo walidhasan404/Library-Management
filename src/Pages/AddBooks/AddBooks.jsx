@@ -48,7 +48,7 @@ const AddBooks = () => {
             publishedYear: null // Optional field
         };
 
-        fetch(API_ENDPOINTS.BOOKS, {
+        fetch(API_ENDPOINTS.ADD_BOOK, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ const AddBooks = () => {
                 if (data.success) {
                     Swal.fire({
                         title: "Success!",
-                        text: "The book has been added successfully.",
+                        text: "The book has been added to your suggestions and will appear in 'Added Books'.",
                         icon: "success"
                     });
                     form.reset();
@@ -85,12 +85,15 @@ const AddBooks = () => {
     return (
         <div className="flex justify-center items-center min-h-screen bg-gray-50">
             <div className="w-full max-w-2xl p-6 bg-white rounded-lg shadow-lg">
-                <h2 className="text-3xl font-semibold text-center text-gray-800 mb-6">Add a New Book</h2>
+                <h2 className="text-3xl font-semibold text-center text-gray-800 mb-6">Suggest a New Book</h2>
+                <p className="text-center text-gray-600 mb-6">
+                    Add book suggestions that will appear in your "Added Books" section
+                </p>
                 
                 {!user && (
                     <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
                         <p className="text-blue-800 text-center">
-                            <strong>Note:</strong> You need to be logged in to add books. 
+                            <strong>Note:</strong> You need to be logged in to suggest books. 
                             <Link to="/login" className="text-blue-600 hover:underline ml-1">
                                 Click here to login
                             </Link>
@@ -130,7 +133,7 @@ const AddBooks = () => {
                         <input type="text" name="image" className="input input-bordered" placeholder="Enter image URL" required />
                     </div>
                     <div className="form-control mt-6">
-                        <button type="submit" className="btn btn-primary w-full text-lg">Add Book</button>
+                        <button type="submit" className="btn btn-primary w-full text-lg">Suggest Book</button>
                     </div>
                 </form>
             </div>
