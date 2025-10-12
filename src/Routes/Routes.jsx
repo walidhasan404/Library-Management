@@ -14,6 +14,7 @@ import ErrorPage from "../Pages/ErrorPage/ErrorPage";
 import PrivateRoute from "./PrivateRoute";
 import BorrowedBooks from "../Pages/BorrowedBooks/BorrowedBooks";
 import AddedBooks from "../Pages/AddedBooks/AddedBooks";
+import { API_ENDPOINTS } from "../config/api";
 
 const router = createBrowserRouter([
     {
@@ -44,17 +45,17 @@ const router = createBrowserRouter([
             {
                 path: '/book/:id',
                 element: <PrivateRoute><BookDetails></BookDetails></PrivateRoute>,
-                loader: ({ params }) => fetch(`https://library-management-server-tau.vercel.app/book/${params.id}`)
+                loader: ({ params }) => fetch(API_ENDPOINTS.BOOK_BY_ID(params.id))
             },
             {
                 path: '/updateBook/:id',
                 element: <PrivateRoute><UpdateBooks></UpdateBooks></PrivateRoute>,
-                loader: ({ params }) => fetch(`https://library-management-server-tau.vercel.app/book/${params.id}`)
+                loader: ({ params }) => fetch(API_ENDPOINTS.BOOK_BY_ID(params.id))
             },
             {
                 path: 'books/:category',
                 element: <CategorizedBooks></CategorizedBooks>,
-                loader: ({ params }) => fetch(`https://library-management-server-tau.vercel.app/books/${params.category}`)
+                loader: ({ params }) => fetch(API_ENDPOINTS.BOOKS_BY_CATEGORY(params.category))
             },
             {
                 path: 'login',
