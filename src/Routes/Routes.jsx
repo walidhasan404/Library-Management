@@ -14,8 +14,6 @@ import ErrorPage from "../Pages/ErrorPage/ErrorPage";
 import PrivateRoute from "./PrivateRoute";
 import BorrowedBooks from "../Pages/BorrowedBooks/BorrowedBooks";
 import AddedBooks from "../Pages/AddedBooks/AddedBooks";
-import AdminUsers from "../Pages/AdminUsers/AdminUsers";
-import AdminCheck from "../Pages/AdminCheck/AdminCheck";
 import { API_ENDPOINTS } from "../config/api";
 
 const router = createBrowserRouter([
@@ -43,14 +41,6 @@ const router = createBrowserRouter([
             {
                 path: 'borrow',
                 element: <PrivateRoute><BorrowedBooks></BorrowedBooks></PrivateRoute>
-            },
-            {
-                path: 'admin-users',
-                element: <PrivateRoute><AdminUsers></AdminUsers></PrivateRoute>
-            },
-            {
-                path: 'admin-check',
-                element: <AdminCheck></AdminCheck>
             },
             {
                 path: '/book/:id',
