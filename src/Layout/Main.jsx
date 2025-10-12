@@ -22,16 +22,18 @@ const Main = () => {
   };
 
   return (
-    <div className="relative min-h-screen dark:bg-slate-800">
+    <div className="relative min-h-screen bg-white dark:bg-slate-900">
       {/* ⭐ Background always behind everything */}
       <VantaBackground />
 
-      {/* Content */}
-      <Navbar handleTheme={handleTheme} theme={theme} />
-      <main className="relative z-10">
-        <Outlet />
-      </main>
-      <Footer />
+      {/* Content with proper z-index */}
+      <div className="relative z-10">
+        <Navbar handleTheme={handleTheme} theme={theme} />
+        <main>
+          <Outlet />
+        </main>
+        <Footer />
+      </div>
     </div>
   );
 };

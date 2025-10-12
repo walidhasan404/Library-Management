@@ -35,30 +35,31 @@ const Navbar = ({ handleTheme, theme }) => {
 
 
     return (
-        <div>
-            <div className="navbar bg-base-100 dark:bg-slate-800 p-2">
-                <div className="navbar-start">
-                    <div className="dropdown">
-                        <div tabIndex={0} role="button" className="btn btn-ghost dark:text-white lg:hidden">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
-                        </div>
-                        <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-                            {navItems}
-                        </ul>
+        <div className="navbar bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm shadow-lg sticky top-0 z-50">
+            <div className="navbar-start">
+                <div className="dropdown">
+                    <div tabIndex={0} role="button" className="btn btn-ghost dark:text-white lg:hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
                     </div>
-                    <a className="font-bold dark:text-white text-lg md:text-xl lg:text-2xl">TechVerse</a><img className="w-8 lg:ml-2" src="https://i.ibb.co/K5wQ7fD/download-26.jpg" alt="" />
-                </div>
-                <div className="navbar-center hidden lg:flex">
-                    <ul className="menu menu-horizontal dark:text-white px-1">
+                    <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
                         {navItems}
                     </ul>
                 </div>
-                <div className="navbar-end">
-                    <div className="flex justify-end mr-4">
-                        <button onClick={handleTheme} className="btn bg-red-100 hover:bg-red-200">
-                            <MdOutlineDarkMode />
-                        </button>
-                    </div>
+                <div className="flex items-center">
+                    <a className="font-bold dark:text-white text-lg md:text-xl lg:text-2xl">TechVerse</a>
+                    <img className="w-8 lg:ml-2" src="https://i.ibb.co/K5wQ7fD/download-26.jpg" alt="" />
+                </div>
+            </div>
+            <div className="navbar-center hidden lg:flex">
+                <ul className="menu menu-horizontal dark:text-white px-1">
+                    {navItems}
+                </ul>
+            </div>
+            <div className="navbar-end">
+                <div className="flex items-center gap-2">
+                    <button onClick={handleTheme} className="btn btn-ghost btn-sm">
+                        <MdOutlineDarkMode className="text-lg" />
+                    </button>
                     {user?.email ? <>
                         <div className="tooltip relative" onMouseEnter={() => setShowTooltip(true)} onMouseLeave={() => setShowTooltip(false)}>
                             <button className="w-10 mr-3">
