@@ -45,17 +45,29 @@ const router = createBrowserRouter([
             {
                 path: '/book/:id',
                 element: <PrivateRoute><BookDetails></BookDetails></PrivateRoute>,
-                loader: ({ params }) => fetch(API_ENDPOINTS.BOOK_BY_ID(params.id))
+                loader: async ({ params }) => {
+                    const response = await fetch(API_ENDPOINTS.BOOK_BY_ID(params.id));
+                    const result = await response.json();
+                    return result.data;
+                }
             },
             {
                 path: '/updateBook/:id',
                 element: <PrivateRoute><UpdateBooks></UpdateBooks></PrivateRoute>,
-                loader: ({ params }) => fetch(API_ENDPOINTS.BOOK_BY_ID(params.id))
+                loader: async ({ params }) => {
+                    const response = await fetch(API_ENDPOINTS.BOOK_BY_ID(params.id));
+                    const result = await response.json();
+                    return result.data;
+                }
             },
             {
                 path: 'books/:category',
                 element: <CategorizedBooks></CategorizedBooks>,
-                loader: ({ params }) => fetch(API_ENDPOINTS.BOOKS_BY_CATEGORY(params.category))
+                loader: async ({ params }) => {
+                    const response = await fetch(API_ENDPOINTS.BOOKS_BY_CATEGORY(params.category));
+                    const result = await response.json();
+                    return result.data;
+                }
             },
             {
                 path: 'login',
