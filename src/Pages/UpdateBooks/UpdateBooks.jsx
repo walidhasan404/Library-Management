@@ -1,11 +1,14 @@
 import Swal from 'sweetalert2'
 import { useLoaderData, Link } from 'react-router-dom';
 import { API_ENDPOINTS } from '../../config/api';
+import { useState } from 'react';
 
 const UpdateBooks = () => {
-
     const updateBook = useLoaderData();
     const { _id, image, name, author_name, author, category, rating } = updateBook;
+    
+    const [selectedCategory, setSelectedCategory] = useState(category || 'CSE');
+    const categories = ['CSE', 'EEE', 'Civil', 'Non-Tech'];
 
     const handleUpdateBook = event => {
         event.preventDefault();
@@ -32,8 +35,8 @@ const UpdateBooks = () => {
         const image = form.image.value;
         const name = form.name.value;
         const author = form.author.value;
-        const category = form.category.value;
-        const rating = form.rating.value;
+        const category = selectedCategory; // Use selected category from tabs
+        const rating = parseFloat(form.rating.value);
 
         const updatedBook = {
             image,
@@ -113,25 +116,40 @@ const UpdateBooks = () => {
                                 <input name="image" defaultValue={image} type="text" className="grow" placeholder="Image URL" />
                             </label>
                         </div>
-                        <div>
-                            <label className="select select-bordered">
-                                <span className="select-content navbar-end">
-                                    <select name="category" defaultValue={category}>
-                                        <option disabled>Choose Category</option>
-                                        <option value="Novel">Novel</option>
-                                        <option value="Science Fiction">Science Fiction</option>
-                                        <option value="Horror">Horror</option>
-                                        <option value="Thriller">Thriller</option>
-                                    </select>
-                                </span>
-                            </label>
+                        <div className="w-1/2">
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                            <div className="flex flex-wrap gap-2">
+                                {categories.map((cat) => (
+                                    <button
+                                        key={cat}
+                                        type="button"
+                                        onClick={() => setSelectedCategory(cat)}
+                                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                                            selectedCategory === cat
+                                                ? 'bg-blue-500 text-white shadow-md'
+                                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                        }`}
+                                    >
+                                        {cat}
+                                    </button>
+                                ))}
+                            </div>
+                            <input type="hidden" name="category" value={selectedCategory} />
                         </div>
                     </div>
                     <div className="flex gap-3 mb-4">
                         <div className="w-1/2">
-                            <label className="input input-bordered flex items-center w-full gap-2">
-                                <input name="rating" defaultValue={rating} type="text" className="grow" placeholder="Rating" />
-                            </label>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Rating</label>
+                            <input 
+                                name="rating" 
+                                defaultValue={rating} 
+                                type="number" 
+                                min="0" 
+                                max="5" 
+                                step="0.1" 
+                                className="input input-bordered w-full" 
+                                placeholder="Rating (0.0-5.0)" 
+                            />
                         </div>
                     </div>
                     <div className="mt-4 mx-2">

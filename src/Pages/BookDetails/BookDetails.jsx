@@ -3,6 +3,7 @@ import { useLoaderData, Link } from "react-router-dom";
 import { AuthContext } from "../../Providers/AuthProvider";
 import axios from "axios";
 import { API_ENDPOINTS, dataTransformers } from "../../config/api";
+import Swal from "sweetalert2";
 
 const BookDetails = () => {
     const book = useLoaderData();
@@ -34,6 +35,23 @@ const BookDetails = () => {
     }, [user, _id]);
 
     const handleBorrowBtn = () => {
+        // Check if user is authenticated
+        if (!user) {
+            Swal.fire({
+                title: 'Authentication Required',
+                text: 'Please log in to borrow books. You need to be authenticated to borrow books.',
+                icon: 'warning',
+                confirmButtonText: 'Go to Login',
+                showCancelButton: true,
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Navigate to login page
+                    window.location.href = '/login';
+                }
+            });
+            return;
+        }
         document.getElementById('borrow-modal').showModal();
     };
 
@@ -88,7 +106,7 @@ const BookDetails = () => {
                             onClick={handleBorrowBtn} 
                             disabled={isBorrowed}
                         >
-                            {isBorrowed ? 'Already Borrowed' : 'Borrow'}
+                            {isBorrowed ? 'Already Borrowed' : user ? 'Borrow' : 'Login to Borrow'}
                         </button>
                         {user?.email && (
                             <Link to={`/updateBook/${_id}`} className="btn bg-green-200 hover:bg-green-400 my-2">

@@ -36,11 +36,11 @@ const router = createBrowserRouter([
             },
             {
                 path: 'added',
-                element: <AddedBooks></AddedBooks>
+                element: <PrivateRoute><AddedBooks></AddedBooks></PrivateRoute>
             },
             {
                 path: 'borrow',
-                element: <BorrowedBooks></BorrowedBooks>
+                element: <PrivateRoute><BorrowedBooks></BorrowedBooks></PrivateRoute>
             },
             {
                 path: '/book/:id',
@@ -53,7 +53,7 @@ const router = createBrowserRouter([
             },
             {
                 path: '/updateBook/:id',
-                element: <UpdateBooks></UpdateBooks>,
+                element: <PrivateRoute><UpdateBooks></UpdateBooks></PrivateRoute>,
                 loader: async ({ params }) => {
                     const response = await fetch(API_ENDPOINTS.BOOK_BY_ID(params.id));
                     const result = await response.json();

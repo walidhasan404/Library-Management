@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { AuthContext } from '../../Providers/AuthProvider';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
@@ -6,6 +6,9 @@ import { API_ENDPOINTS } from '../../config/api';
 
 const AddBooks = () => {
     const { user } = useContext(AuthContext);
+    const [selectedCategory, setSelectedCategory] = useState('CSE');
+    
+    const categories = ['CSE', 'EEE', 'Civil', 'Non-Tech'];
 
     const handleAddBooks = (event) => {
         event.preventDefault();
@@ -32,9 +35,9 @@ const AddBooks = () => {
         const name = form.name.value;
         const quantity = parseInt(form.quantity.value);
         const author = form.author.value;
-        const category = form.category.value;
+        const category = selectedCategory; // Use selected category from tabs
         const description = form.description.value;
-        const rating = parseInt(form.rating.value);
+        const rating = parseFloat(form.rating.value);
         const image = form.image.value;
 
         const newBook = {
@@ -117,7 +120,23 @@ const AddBooks = () => {
                         </div>
                         <div className="form-control">
                             <label className="label text-gray-600 font-medium">Category</label>
-                            <input type="text" name="category" className="input input-bordered" placeholder="Enter category" required />
+                            <div className="flex flex-wrap gap-2 mt-2">
+                                {categories.map((category) => (
+                                    <button
+                                        key={category}
+                                        type="button"
+                                        onClick={() => setSelectedCategory(category)}
+                                        className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                                            selectedCategory === category
+                                                ? 'bg-blue-500 text-white shadow-md'
+                                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                        }`}
+                                    >
+                                        {category}
+                                    </button>
+                                ))}
+                            </div>
+                            <input type="hidden" name="category" value={selectedCategory} />
                         </div>
                     </div>
                     <div className="form-control">
@@ -126,7 +145,16 @@ const AddBooks = () => {
                     </div>
                     <div className="form-control">
                         <label className="label text-gray-600 font-medium">Rating</label>
-                        <input type="number" name="rating" min="1" max="5" className="input input-bordered" placeholder="Enter rating (1-5)" required />
+                        <input 
+                            type="number" 
+                            name="rating" 
+                            min="0" 
+                            max="5" 
+                            step="0.1" 
+                            className="input input-bordered" 
+                            placeholder="Enter rating (0.0-5.0)" 
+                            required 
+                        />
                     </div>
                     <div className="form-control">
                         <label className="label text-gray-600 font-medium">Image URL</label>
