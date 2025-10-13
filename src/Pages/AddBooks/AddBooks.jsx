@@ -48,7 +48,9 @@ const AddBooks = () => {
             rating,
             image,
             isbn: '', // Optional field
-            publishedYear: null // Optional field
+            publishedYear: null, // Optional field
+            user: user?.uid || user?.email, // Add user information
+            email: user?.email // Add email field
         };
 
         fetch(API_ENDPOINTS.ADD_BOOK, {

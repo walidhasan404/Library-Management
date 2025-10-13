@@ -1,11 +1,13 @@
 import Swal from 'sweetalert2'
 import { useLoaderData, Link } from 'react-router-dom';
 import { API_ENDPOINTS } from '../../config/api';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { AuthContext } from '../../Providers/AuthProvider';
 
 const UpdateBooks = () => {
     const updateBook = useLoaderData();
     const { _id, image, name, author_name, author, category, rating } = updateBook;
+    const { user } = useContext(AuthContext);
     
     const [selectedCategory, setSelectedCategory] = useState(category || 'CSE');
     const categories = ['CSE', 'EEE', 'Civil', 'Non-Tech'];
@@ -43,7 +45,9 @@ const UpdateBooks = () => {
             name,
             author_name: author, // Backend expects author_name
             category,
-            rating: parseFloat(rating)
+            rating: parseFloat(rating),
+            user: user?.uid || user?.email, // Add user information
+            email: user?.email // Add email field
         };
         
         fetch(API_ENDPOINTS.BOOK_BY_ID(_id), {
