@@ -51,9 +51,6 @@ const AddBooks = () => {
             // Note: isbn and publishedYear are optional and not included to avoid validation issues
         };
 
-        console.log('Sending book data:', newBook);
-        console.log('Token:', token ? 'Present' : 'Missing');
-
         fetch(API_ENDPOINTS.ADD_BOOK, {
             method: 'POST',
             headers: {
@@ -62,12 +59,8 @@ const AddBooks = () => {
             },
             body: JSON.stringify(newBook)
         })
-            .then((res) => {
-                console.log('Response status:', res.status);
-                return res.json();
-            })
+            .then((res) => res.json())
             .then((data) => {
-                console.log('Response data:', data);
                 if (data.success) {
                     Swal.fire({
                         title: "Success!",
