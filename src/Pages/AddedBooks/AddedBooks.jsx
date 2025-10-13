@@ -11,7 +11,7 @@ const AddedBooks = () => {
   useEffect(() => {
     if (user?.email) {
       const token = localStorage.getItem('access-token');
-      axios.get(API_ENDPOINTS.ADDED_BOOKS, {
+      axios.get(`${API_ENDPOINTS.ADDED_BOOKS}?email=${encodeURIComponent(user.email)}`, {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true
       })
