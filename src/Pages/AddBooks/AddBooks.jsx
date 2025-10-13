@@ -51,6 +51,11 @@ const AddBooks = () => {
             // Note: isbn and publishedYear are optional and not included to avoid validation issues
         };
 
+        console.log('=== DEBUGGING ADD BOOK ===');
+        console.log('Request data:', newBook);
+        console.log('Token exists:', !!token);
+        console.log('API endpoint:', API_ENDPOINTS.ADD_BOOK);
+
         fetch(API_ENDPOINTS.ADD_BOOK, {
             method: 'POST',
             headers: {
@@ -59,8 +64,13 @@ const AddBooks = () => {
             },
             body: JSON.stringify(newBook)
         })
-            .then((res) => res.json())
+            .then((res) => {
+                console.log('Response status:', res.status);
+                console.log('Response headers:', res.headers);
+                return res.json();
+            })
             .then((data) => {
+                console.log('Response data:', data);
                 if (data.success) {
                     Swal.fire({
                         title: "Success!",
@@ -77,7 +87,7 @@ const AddBooks = () => {
                 }
             })
             .catch((error) => {
-                console.error('Error adding book:', error);
+                console.error('Fetch error:', error);
                 Swal.fire({
                     title: "Error!",
                     text: "There was an error adding the book. Please try again.",
