@@ -45,9 +45,8 @@ const UpdateBooks = () => {
             name,
             author_name: author, // Backend expects author_name
             category,
-            rating: parseFloat(rating),
-            user: user?.uid || user?.email, // Add user information
-            email: user?.email // Add email field
+            rating: parseFloat(rating)
+            // Note: user and email are automatically handled by backend from JWT token
         };
         
         fetch(API_ENDPOINTS.BOOK_BY_ID(_id), {

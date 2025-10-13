@@ -48,9 +48,8 @@ const AddBooks = () => {
             rating,
             image,
             isbn: '', // Optional field
-            publishedYear: null, // Optional field
-            user: user?.uid || user?.email, // Add user information
-            email: user?.email // Add email field
+            publishedYear: null // Optional field
+            // Note: user and email are automatically set by backend from JWT token
         };
 
         fetch(API_ENDPOINTS.ADD_BOOK, {
