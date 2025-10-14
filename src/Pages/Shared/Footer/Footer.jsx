@@ -1,12 +1,12 @@
 const Footer = () => {
     return (
         <div>
-            <footer className="footer footer-center p-10 bg-blue-200 text-base-content rounded">
+            <footer className="footer footer-center p-10 bg-blue-200 dark:bg-slate-800 text-base-content dark:text-gray-200 rounded">
                 <nav className="grid grid-flow-col gap-4">
-                    <a className="link link-hover">About us</a>
-                    <a className="link link-hover">Contact</a>
-                    <a className="link link-hover">Jobs</a>
-                    <a className="link link-hover">Press kit</a>
+                    <a className="link link-hover dark:text-gray-300 dark:hover:text-white">About us</a>
+                    <a className="link link-hover dark:text-gray-300 dark:hover:text-white">Contact</a>
+                    <a className="link link-hover dark:text-gray-300 dark:hover:text-white">Jobs</a>
+                    <a className="link link-hover dark:text-gray-300 dark:hover:text-white">Press kit</a>
                 </nav>
                 <nav>
                     <div className="grid grid-flow-col gap-4">
@@ -16,7 +16,7 @@ const Footer = () => {
                     </div>
                 </nav>
                 <aside>
-                    <p>Copyright © 2024 - All right reserved by TechVerse</p>
+                    <p className="dark:text-gray-300">Copyright © 2024 - All right reserved by TechVerse</p>
                 </aside>
             </footer>
         </div>

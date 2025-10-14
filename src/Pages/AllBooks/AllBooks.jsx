@@ -61,12 +61,12 @@ const AllBooks = () => {
     };
 
     return (
-        <div className="bg-white dark:bg-slate-400 p-6 rounded-lg shadow-md">
+        <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-md">
             <h3 className="text-3xl text-center py-4 font-bold text-gray-800 dark:text-white">Library Collection</h3>
             <div className="flex justify-end mb-4">
                 <button 
                     onClick={toggleView} 
-                    className="btn bg-gray-200 text-gray-800 hover:bg-gray-300 transition ease-in-out duration-200 p-2 rounded-md"
+                    className="btn bg-gray-200 dark:bg-slate-600 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-slate-500 transition ease-in-out duration-200 p-2 rounded-md"
                     aria-label={view === 'card' ? 'Switch to Table View' : 'Switch to Card View'}
                 >
                     {view === 'card' ? <FaTableList /> : <IoIosCard />}
