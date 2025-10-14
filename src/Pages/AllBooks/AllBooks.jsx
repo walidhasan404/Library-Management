@@ -119,7 +119,7 @@ const AllBooks = () => {
                     )}
 
                     {/* Pagination */}
-                    {pagination.totalPages > 1 && (
+                    {pagination?.totalPages > 1 && (
                         <div className="flex justify-center items-center mt-8 space-x-2">
                             {/* Previous Button */}
                             <button
@@ -165,10 +165,10 @@ const AllBooks = () => {
                     )}
 
                     {/* Pagination Info */}
-                    {pagination.totalBooks && (
+                    {pagination?.totalBooks && (
                         <div className="text-center mt-4 text-gray-600 dark:text-gray-400">
                             Showing {books.length} of {pagination.totalBooks} books
-                            {pagination.totalPages > 1 && (
+                            {pagination?.totalPages > 1 && (
                                 <span> • Page {pagination.currentPage} of {pagination.totalPages}</span>
                             )}
                         </div>
