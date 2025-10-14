@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const BooksCard = ({ book }) => {
+const BooksCard = ({ book, isAdmin }) => {
     const { _id, image, name, author, author_name, quantity, category, rating } = book;
 
     return (
@@ -15,12 +15,27 @@ const BooksCard = ({ book }) => {
                     <p className="text-gray-700 dark:text-gray-900">
                         <span className="font-semibold">Available:</span> {quantity}
                     </p>
-                    <div className="card-actions mt-4">
-                        <Link to={`/book/${_id}`}>
-                            <button className="btn bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-full transition duration-300">
-                                View Details
-                            </button>
-                        </Link>
+                    <div className="card-actions mt-4 flex gap-2">
+                        {isAdmin ? (
+                            <>
+                                <Link to={`/updateBook/${_id}`} className="flex-1">
+                                    <button className="btn bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-full transition duration-300 w-full">
+                                        Update
+                                    </button>
+                                </Link>
+                                <Link to={`/book/${_id}`} className="flex-1">
+                                    <button className="btn bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-full transition duration-300 w-full">
+                                        View
+                                    </button>
+                                </Link>
+                            </>
+                        ) : (
+                            <Link to={`/book/${_id}`} className="flex-1">
+                                <button className="btn bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-full transition duration-300 w-full">
+                                    View Details
+                                </button>
+                            </Link>
+                        )}
                     </div>
                 </div>
             </div>

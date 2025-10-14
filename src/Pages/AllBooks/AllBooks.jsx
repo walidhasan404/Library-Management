@@ -1,15 +1,42 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import BooksCard from "./BooksCard";
 import BooksTable from "./BooksTable";
 import { FaTableList } from "react-icons/fa6";
 import { IoIosCard } from "react-icons/io";
 import { API_ENDPOINTS, dataTransformers } from "../../config/api";
+import { AuthContext } from "../../Providers/AuthProvider";
+import axios from "axios";
 
 const AllBooks = () => {
+    const { user } = useContext(AuthContext);
     const [books, setBooks] = useState([]);
     const [view, setView] = useState('card');
+    const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
+        // Check admin status
+        const checkAdminStatus = async () => {
+            if (user?.email) {
+                try {
+                    const token = localStorage.getItem('access-token');
+                    const response = await axios.get(
+                        API_ENDPOINTS.CHECK_ADMIN(user.email),
+                        {
+                            headers: { Authorization: `Bearer ${token}` },
+                            withCredentials: true
+                        }
+                    );
+                    const adminStatus = response.data.data?.admin || false;
+                    setIsAdmin(adminStatus);
+                } catch (error) {
+                    console.error('Error checking admin status:', error);
+                    setIsAdmin(false);
+                }
+            }
+        };
+
+        checkAdminStatus();
+
         // Fetch books from MongoDB database
         fetch(API_ENDPOINTS.BOOKS)
             .then(res => res.json())
@@ -22,7 +49,7 @@ const AllBooks = () => {
             .catch(error => {
                 console.error('Error fetching books:', error);
             });
-    }, []);
+    }, [user]);
 
     const toggleView = () => {
         setView(prevView => prevView === 'card' ? 'table' : 'card');
@@ -56,11 +83,11 @@ const AllBooks = () => {
             {view === 'card' ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {books.map(book => (
-                        <BooksCard key={book._id} book={book} />
+                        <BooksCard key={book._id} book={book} isAdmin={isAdmin} />
                     ))}
                 </div>
             ) : (
-                <BooksTable books={books} />
+                <BooksTable books={books} isAdmin={isAdmin} />
             )}
         </div>
     );

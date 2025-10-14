@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const BooksTable = ({ books }) => {
+const BooksTable = ({ books, isAdmin }) => {
     return (
         <div className="overflow-x-auto bg-white dark:bg-slate-300 p-4 rounded-lg shadow-md">
             <table className="table-auto w-full text-left">
@@ -11,7 +11,7 @@ const BooksTable = ({ books }) => {
                         <th className="px-4 py-2 text-gray-600 dark:text-gray-800 font-semibold">Author</th>
                         <th className="px-4 py-2 text-gray-600 dark:text-gray-800 font-semibold">Category</th>
                         <th className="px-4 py-2 text-gray-600 dark:text-gray-800 font-semibold">Rating</th>
-                        <th className="px-4 py-2 text-gray-600 dark:text-gray-800 font-semibold">Details</th>
+                        <th className="px-4 py-2 text-gray-600 dark:text-gray-800 font-semibold">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -25,11 +25,20 @@ const BooksTable = ({ books }) => {
                             <td className="px-4 py-2 text-gray-600 dark:text-gray-800">{book.category}</td>
                             <td className="px-4 py-2 text-gray-600 dark:text-gray-800">{book.rating}</td>
                             <td className="px-4 py-2">
-                                <Link to={`/book/${book._id}`}>
-                                    <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg shadow-sm transition duration-200">
-                                        View
-                                    </button>
-                                </Link>
+                                <div className="flex gap-2">
+                                    {isAdmin && (
+                                        <Link to={`/updateBook/${book._id}`}>
+                                            <button className="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg shadow-sm transition duration-200">
+                                                Update
+                                            </button>
+                                        </Link>
+                                    )}
+                                    <Link to={`/book/${book._id}`}>
+                                        <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg shadow-sm transition duration-200">
+                                            {isAdmin ? 'View' : 'View Details'}
+                                        </button>
+                                    </Link>
+                                </div>
                             </td>
                         </tr>
                     ))}
