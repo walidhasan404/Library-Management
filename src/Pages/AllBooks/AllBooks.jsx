@@ -23,12 +23,21 @@ const AllBooks = () => {
             const response = await fetch(`${API_ENDPOINTS.BOOKS}?page=${page}&limit=9`);
             const data = await response.json();
             
+            console.log('API Response:', data); // Debug log
+            
             if (data.success) {
                 const booksData = data.data.books || [];
+                const paginationData = data.data.pagination || {};
+                
+                console.log('Books Data:', booksData); // Debug log
+                console.log('Pagination Data:', paginationData); // Debug log
+                
                 const transformedBooks = booksData.map(book => dataTransformers.transformBook(book));
                 setBooks(transformedBooks);
-                setPagination(data.data.pagination);
+                setPagination(paginationData);
                 setCurrentPage(page);
+            } else {
+                console.error('API returned success: false', data);
             }
         } catch (error) {
             console.error('Error fetching books:', error);
@@ -108,14 +117,23 @@ const AllBooks = () => {
             {/* Books Display */}
             {!loading && (
                 <>
-                    {view === 'card' ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {books.map(book => (
-                                <BooksCard key={book._id} book={book} isAdmin={isAdmin} />
-                            ))}
+                    {books.length === 0 ? (
+                        <div className="flex flex-col justify-center items-center py-12">
+                            <p className="text-xl text-gray-600 dark:text-gray-400 mb-4">No books found</p>
+                            <p className="text-gray-500 dark:text-gray-500">Please check back later or contact the administrator.</p>
                         </div>
                     ) : (
-                        <BooksTable books={books} isAdmin={isAdmin} />
+                        <>
+                            {view === 'card' ? (
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    {books.map(book => (
+                                        <BooksCard key={book._id} book={book} isAdmin={isAdmin} />
+                                    ))}
+                                </div>
+                            ) : (
+                                <BooksTable books={books} isAdmin={isAdmin} />
+                            )}
+                        </>
                     )}
 
                     {/* Pagination */}
