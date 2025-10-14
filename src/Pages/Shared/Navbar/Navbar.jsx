@@ -24,6 +24,7 @@ const Navbar = ({ handleTheme, theme }) => {
             <>
                 <li><Link to="/added">All Added Books</Link></li>
                 <li><Link to="/borrow">Borrowed Books</Link></li>
+                <li><Link to="/users">Users</Link></li>
             </>
         )}
 

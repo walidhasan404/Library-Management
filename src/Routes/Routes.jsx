@@ -14,6 +14,7 @@ import ErrorPage from "../Pages/ErrorPage/ErrorPage";
 import PrivateRoute from "./PrivateRoute";
 import BorrowedBooks from "../Pages/BorrowedBooks/BorrowedBooks";
 import AddedBooks from "../Pages/AddedBooks/AddedBooks";
+import Users from "../Pages/Users/Users";
 import { API_ENDPOINTS } from "../config/api";
 
 const router = createBrowserRouter([
@@ -84,6 +85,10 @@ const router = createBrowserRouter([
             {
                 path: 'history',
                 element: <History></History>
+            },
+            {
+                path: 'users',
+                element: <PrivateRoute><Users></Users></PrivateRoute>
             },
         ]
     }
