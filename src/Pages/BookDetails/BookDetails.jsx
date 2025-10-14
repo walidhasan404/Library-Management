@@ -83,6 +83,9 @@ const BookDetails = () => {
             returnDate: date,
         };
 
+        console.log('Borrowing book with data:', borrowedBook);
+        console.log('Book details:', { name, author, author_name, category, image });
+
         try {
             const response = await fetch(API_ENDPOINTS.BORROW_BOOK, {
                 method: 'POST',
@@ -93,12 +96,18 @@ const BookDetails = () => {
                 body: JSON.stringify(borrowedBook)
             });
             const data = await response.json();
+            console.log('Borrow response:', data);
+            
             if (data.success) {
+                Swal.fire('Success!', 'Book borrowed successfully!', 'success');
                 setIsBorrowed(true);
                 document.getElementById('borrow-modal').close();
+            } else {
+                Swal.fire('Error!', data.message || 'Failed to borrow book', 'error');
             }
         } catch (error) {
             console.error('Error borrowing book:', error);
+            Swal.fire('Error!', 'Failed to borrow book. Please try again.', 'error');
         }
     };
 
