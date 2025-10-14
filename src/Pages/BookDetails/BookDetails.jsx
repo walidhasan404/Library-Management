@@ -182,7 +182,7 @@ const BookDetails = () => {
                             {/* Description */}
                             <div className="mb-6">
                                 <h3 className="text-lg font-semibold text-gray-800 mb-2">About This Book</h3>
-                                <p className="text-gray-600 leading-relaxed">{description || 'No description available.'}</p>
+                                <p className="text-gray-600 leading-relaxed">{description || shortDescription || 'No description available.'}</p>
                             </div>
 
                             {/* Availability */}
