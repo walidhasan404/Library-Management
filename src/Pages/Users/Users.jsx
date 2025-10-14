@@ -16,6 +16,13 @@ const Users = () => {
     const fetchUsers = async () => {
         try {
             const token = localStorage.getItem('access-token');
+            
+            if (!token) {
+                setError('Please log in to view users.');
+                setLoading(false);
+                return;
+            }
+
             const response = await axios.get(API_ENDPOINTS.USERS, {
                 headers: { Authorization: `Bearer ${token}` },
                 withCredentials: true
@@ -26,7 +33,14 @@ const Users = () => {
             setLoading(false);
         } catch (err) {
             console.error('Error fetching users:', err);
-            setError('Failed to fetch users. Please try again.');
+            
+            if (err.response?.status === 403) {
+                setError('Access denied. Admin privileges required to view users.');
+            } else if (err.response?.status === 401) {
+                setError('Authentication failed. Please log in again.');
+            } else {
+                setError(err.response?.data?.message || 'Failed to fetch users. Please try again.');
+            }
             setLoading(false);
         }
     };
@@ -139,15 +153,30 @@ const Users = () => {
 
     if (error) {
         return (
-            <div className="flex justify-center items-center min-h-screen">
-                <div className="text-center">
-                    <p className="text-red-500 text-xl">{error}</p>
-                    <button 
-                        onClick={fetchUsers}
-                        className="btn btn-primary mt-4"
-                    >
-                        Try Again
-                    </button>
+            <div className="flex justify-center items-center min-h-screen bg-gray-50">
+                <div className="text-center max-w-md p-8 bg-white rounded-lg shadow-lg">
+                    <div className="mb-4">
+                        <svg className="w-16 h-16 mx-auto text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                    </div>
+                    <h2 className="text-2xl font-bold text-gray-800 mb-4">Access Error</h2>
+                    <p className="text-red-600 text-lg mb-6">{error}</p>
+                    {!error.includes('Admin privileges') && (
+                        <button 
+                            onClick={fetchUsers}
+                            className="btn btn-primary"
+                        >
+                            Try Again
+                        </button>
+                    )}
+                    {error.includes('Admin privileges') && (
+                        <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                            <p className="text-sm text-yellow-800">
+                                This page is only accessible to administrators. Please contact an admin if you need access.
+                            </p>
+                        </div>
+                    )}
                 </div>
             </div>
         );
