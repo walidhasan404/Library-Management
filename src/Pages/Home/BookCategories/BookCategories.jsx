@@ -26,12 +26,12 @@ const departments = [
 const BookCategories = () => {
   return (
     <div className="mb-4 px-4 max-w-6xl mx-auto">
-      <h2 className="text-4xl text-center font-bold mb-10">Departments</h2>
+      <h2 className="text-4xl text-center font-bold mb-10 text-gray-800 dark:text-white">Departments</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
         {departments.map((dept, idx) => (
           <div
             key={idx}
-            className="card w-full bg-white border border-gray-200 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300"
+            className="card w-full bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300"
           >
             <figure className="overflow-hidden rounded-t-xl">
               <img
@@ -41,10 +41,10 @@ const BookCategories = () => {
               />
             </figure>
             <div className="card-body text-center">
-              <h2 className="text-xl font-semibold text-gray-800">{dept.title}</h2>
+              <h2 className="text-xl font-semibold text-gray-800 dark:text-white">{dept.title}</h2>
               <div className="mt-4">
                 <Link to={dept.route}>
-                  <button className="btn bg-sky-400 hover:bg-sky-500 text-white px-6 rounded-md">
+                  <button className="btn bg-sky-400 hover:bg-sky-500 dark:bg-sky-600 dark:hover:bg-sky-700 text-white px-6 rounded-md transition-colors duration-200">
                     Books
                   </button>
                 </Link>
