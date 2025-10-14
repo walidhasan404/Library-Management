@@ -10,7 +10,7 @@ const BookDetails = () => {
     const { user } = useContext(AuthContext);
     const [isBorrowed, setIsBorrowed] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
-    const { _id, image, name: bookName, author, author_name, category, description, rating } = book;
+    const { _id, image, name: bookName, author, author_name, category, description, shortDescription, rating } = book;
 
     useEffect(() => {
         const checkIfBorrowed = async () => {
@@ -172,9 +172,16 @@ const BookDetails = () => {
                                 <span className="text-gray-600">/ 5.0</span>
                             </div>
 
+                            {/* Short Description */}
+                            {shortDescription && (
+                                <div className="mb-4 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border-l-4 border-blue-500">
+                                    <p className="text-gray-700 leading-relaxed italic">{shortDescription}</p>
+                                </div>
+                            )}
+
                             {/* Description */}
                             <div className="mb-6">
-                                <h3 className="text-lg font-semibold text-gray-800 mb-2">Description</h3>
+                                <h3 className="text-lg font-semibold text-gray-800 mb-2">About This Book</h3>
                                 <p className="text-gray-600 leading-relaxed">{description || 'No description available.'}</p>
                             </div>
 
@@ -194,17 +201,17 @@ const BookDetails = () => {
                             {/* Action Button */}
                             <div className="flex gap-3">
                                 {!isAdmin && (
-                                    <button 
+                        <button 
                                         className={`flex-1 py-4 px-6 rounded-xl font-semibold text-lg shadow-lg transition-all duration-300 ${
                                             (isBorrowed || isAdmin || book.quantity === 0) 
                                                 ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
                                                 : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:shadow-xl hover:scale-105'
                                         }`}
-                                        onClick={handleBorrowBtn} 
+                            onClick={handleBorrowBtn} 
                                         disabled={isBorrowed || isAdmin || book.quantity === 0}
-                                    >
+                        >
                                         {isBorrowed ? '✓ Already Borrowed' : book.quantity === 0 ? 'Out of Stock' : user ? '📚 Borrow This Book' : '🔐 Login to Borrow'}
-                                    </button>
+                        </button>
                                 )}
                                 {isAdmin && (
                                     <div className="flex-1 py-4 px-6 rounded-xl font-semibold text-lg bg-gradient-to-r from-gray-400 to-gray-500 text-white text-center">

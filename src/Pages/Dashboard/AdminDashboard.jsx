@@ -140,66 +140,7 @@ const AdminDashboard = () => {
                         </Link>
                     </div>
                 </div>
-
-                {/* Update Books Section */}
-                <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
-                    <div className="flex items-center justify-between mb-6">
-                        <div>
-                            <h2 className="text-2xl font-bold text-gray-800">Update Books</h2>
-                            <p className="text-gray-600">Manage and update book information</p>
-                        </div>
-                        <FaEdit className="text-3xl text-blue-600" />
-                    </div>
-                    
-                    {loading ? (
-                        <div className="text-center py-8">
-                            <div className="loading loading-spinner loading-lg text-primary"></div>
-                        </div>
-                    ) : (
-                        <div className="overflow-x-auto">
-                            <table className="table table-zebra w-full">
-                                <thead className="bg-gray-100">
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Book Name</th>
-                                        <th>Author</th>
-                                        <th>Category</th>
-                                        <th>Quantity</th>
-                                        <th className="text-center">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {books.slice(0, 10).map((book, index) => (
-                                        <tr key={book._id} className="hover">
-                                            <td>{index + 1}</td>
-                                            <td className="font-semibold">{book.name}</td>
-                                            <td>{book.author || book.author_name}</td>
-                                            <td>
-                                                <span className="badge badge-info badge-sm">{book.category}</span>
-                                            </td>
-                                            <td>{book.quantity}</td>
-                                            <td className="text-center">
-                                                <Link to={`/updateBook/${book._id}`}>
-                                                    <button className="btn btn-sm btn-primary">
-                                                        <FaEdit className="mr-1" />
-                                                        Update
-                                                    </button>
-                                                </Link>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                            {books.length > 10 && (
-                                <div className="text-center mt-4">
-                                    <Link to="/all" className="btn btn-outline btn-primary">
-                                        View All {books.length} Books
-                                    </Link>
-                                </div>
-                            )}
-                        </div>
-                    )}
-                </div>
+                
 
                 {/* Admin Info */}
                 <div className="bg-gradient-to-r from-red-500 to-red-600 text-white rounded-2xl shadow-lg p-6">

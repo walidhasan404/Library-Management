@@ -21,7 +21,7 @@ const BooksTable = ({ books, isAdmin }) => {
                                 <img src={book.image} alt={book.name} className="h-12 w-12 object-cover rounded-lg shadow-sm" />
                             </td>
                             <td className="px-4 py-2 text-gray-800 dark:text-gray-900 font-medium">{book.name}</td>
-                            <td className="px-4 py-2 text-gray-600 dark:text-gray-800">{book.author}</td>
+                            <td className="px-4 py-2 text-gray-600 dark:text-gray-800">{book.author || book.author_name}</td>
                             <td className="px-4 py-2 text-gray-600 dark:text-gray-800">{book.category}</td>
                             <td className="px-4 py-2 text-gray-600 dark:text-gray-800">{book.rating}</td>
                             <td className="px-4 py-2">
