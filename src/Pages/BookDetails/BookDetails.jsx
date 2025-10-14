@@ -81,10 +81,13 @@ const BookDetails = () => {
             bookId: _id,
             email,
             returnDate: date,
+            bookName: name,
+            authorName: author_name || author,
+            category,
+            image
         };
 
         console.log('Borrowing book with data:', borrowedBook);
-        console.log('Book details:', { name, author, author_name, category, image });
 
         try {
             const response = await fetch(API_ENDPOINTS.BORROW_BOOK, {
