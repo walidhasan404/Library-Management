@@ -10,6 +10,7 @@ const BorrowedBooks = () => {
     const [books, setBooks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isAdmin, setIsAdmin] = useState(false);
 
     const handleReturn = async (id) => {
         try {
@@ -34,6 +35,18 @@ const BorrowedBooks = () => {
             if (user?.email) {
                 const token = localStorage.getItem('access-token');
                 try {
+                    // Check admin status
+                    const adminResponse = await axios.get(
+                        API_ENDPOINTS.CHECK_ADMIN(user.email),
+                        {
+                            headers: { Authorization: `Bearer ${token}` },
+                            withCredentials: true
+                        }
+                    );
+                    const adminStatus = adminResponse.data.data?.admin || false;
+                    setIsAdmin(adminStatus);
+
+                    // Fetch borrowed books
                     const response = await axios.get(`${API_ENDPOINTS.BORROWED_BOOKS}?email=${user.email}`, {
                         headers: { Authorization: `Bearer ${token}` },
                         withCredentials: true
@@ -68,7 +81,7 @@ const BorrowedBooks = () => {
     if (!user) {
         return (
             <div className="p-8">
-                <h2 className="text-2xl text-center font-semibold mb-6">All Borrowed Books</h2>
+                <h2 className="text-2xl text-center font-semibold mb-6">Borrowed Books</h2>
                 <div className="text-center">
                     <div className="mb-6 p-6 bg-blue-50 border border-blue-200 rounded-lg max-w-md mx-auto">
                         <h3 className="text-lg font-semibold text-blue-800 mb-2">Login Required</h3>
@@ -89,9 +102,13 @@ const BorrowedBooks = () => {
 
     return (
         <div className="p-8">
-            <h2 className="text-2xl text-center font-semibold mb-6">All Borrowed Books</h2>
+            <h2 className="text-2xl text-center font-semibold mb-6">
+                {isAdmin ? 'All Borrowed Books' : 'Your Borrowed Books'}
+            </h2>
             {books.length === 0 ? (
-                <p className="text-center text-gray-500">No borrowed books found.</p>
+                <p className="text-center text-gray-500">
+                    {isAdmin ? 'No borrowed books found.' : 'You have not borrowed any books.'}
+                </p>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {books.map(book => (
