@@ -170,7 +170,7 @@ const BorrowedBooks = () => {
                                                     <span>{book.rating || 'N/A'}</span>
                                                 </div>
                                             </td>
-                                            <td className="text-sm">{book.email}</td>
+                                            <td className="text-sm">{book.userName || book.email}</td>
                                             <td>{formattedBorrowDate}</td>
                                             <td>
                                                 <span className={`font-semibold ${isOverdue ? 'text-red-600' : 'text-green-600'}`}>

@@ -73,7 +73,7 @@ const BookDetails = () => {
         event.preventDefault();
 
         const form = event.target;
-        const name = form.name.value;
+        const userName = form.name.value;
         const date = form.date.value;
         const email = user?.email;
 
@@ -81,10 +81,11 @@ const BookDetails = () => {
             bookId: _id,
             email,
             returnDate: date,
-            bookName: name,
+            bookName: name,  // Use book's name, not form input
             authorName: author_name || author,
             category,
-            image
+            image,
+            userName: userName || user?.displayName || user?.email  // Add user's name
         };
 
         console.log('Borrowing book with data:', borrowedBook);
