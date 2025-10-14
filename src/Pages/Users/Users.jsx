@@ -34,9 +34,7 @@ const Users = () => {
         } catch (err) {
             console.error('Error fetching users:', err);
             
-            if (err.response?.status === 403) {
-                setError('Access denied. Admin privileges required to view users.');
-            } else if (err.response?.status === 401) {
+            if (err.response?.status === 401) {
                 setError('Authentication failed. Please log in again.');
             } else {
                 setError(err.response?.data?.message || 'Failed to fetch users. Please try again.');
@@ -72,7 +70,10 @@ const Users = () => {
                 fetchUsers(); // Refresh the list
             } catch (err) {
                 console.error('Error making admin:', err);
-                Swal.fire('Error!', 'Failed to update user role.', 'error');
+                const errorMsg = err.response?.status === 403 
+                    ? 'Admin privileges required to perform this action.'
+                    : err.response?.data?.message || 'Failed to update user role.';
+                Swal.fire('Error!', errorMsg, 'error');
             }
         }
     };
@@ -104,7 +105,10 @@ const Users = () => {
                 fetchUsers(); // Refresh the list
             } catch (err) {
                 console.error('Error removing admin:', err);
-                Swal.fire('Error!', 'Failed to update user role.', 'error');
+                const errorMsg = err.response?.status === 403 
+                    ? 'Admin privileges required to perform this action.'
+                    : err.response?.data?.message || 'Failed to update user role.';
+                Swal.fire('Error!', errorMsg, 'error');
             }
         }
     };
@@ -135,7 +139,10 @@ const Users = () => {
                 fetchUsers(); // Refresh the list
             } catch (err) {
                 console.error('Error deleting user:', err);
-                Swal.fire('Error!', 'Failed to delete user.', 'error');
+                const errorMsg = err.response?.status === 403 
+                    ? 'Admin privileges required to perform this action.'
+                    : err.response?.data?.message || 'Failed to delete user.';
+                Swal.fire('Error!', errorMsg, 'error');
             }
         }
     };
@@ -160,23 +167,14 @@ const Users = () => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                         </svg>
                     </div>
-                    <h2 className="text-2xl font-bold text-gray-800 mb-4">Access Error</h2>
+                    <h2 className="text-2xl font-bold text-gray-800 mb-4">Error Loading Users</h2>
                     <p className="text-red-600 text-lg mb-6">{error}</p>
-                    {!error.includes('Admin privileges') && (
-                        <button 
-                            onClick={fetchUsers}
-                            className="btn btn-primary"
-                        >
-                            Try Again
-                        </button>
-                    )}
-                    {error.includes('Admin privileges') && (
-                        <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                            <p className="text-sm text-yellow-800">
-                                This page is only accessible to administrators. Please contact an admin if you need access.
-                            </p>
-                        </div>
-                    )}
+                    <button 
+                        onClick={fetchUsers}
+                        className="btn btn-primary"
+                    >
+                        Try Again
+                    </button>
                 </div>
             </div>
         );
