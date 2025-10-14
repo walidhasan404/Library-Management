@@ -70,10 +70,7 @@ const Users = () => {
                 fetchUsers(); // Refresh the list
             } catch (err) {
                 console.error('Error making admin:', err);
-                const errorMsg = err.response?.status === 403 
-                    ? 'Admin privileges required to perform this action.'
-                    : err.response?.data?.message || 'Failed to update user role.';
-                Swal.fire('Error!', errorMsg, 'error');
+                Swal.fire('Error!', err.response?.data?.message || 'Failed to update user role.', 'error');
             }
         }
     };
@@ -105,10 +102,7 @@ const Users = () => {
                 fetchUsers(); // Refresh the list
             } catch (err) {
                 console.error('Error removing admin:', err);
-                const errorMsg = err.response?.status === 403 
-                    ? 'Admin privileges required to perform this action.'
-                    : err.response?.data?.message || 'Failed to update user role.';
-                Swal.fire('Error!', errorMsg, 'error');
+                Swal.fire('Error!', err.response?.data?.message || 'Failed to update user role.', 'error');
             }
         }
     };
@@ -139,10 +133,7 @@ const Users = () => {
                 fetchUsers(); // Refresh the list
             } catch (err) {
                 console.error('Error deleting user:', err);
-                const errorMsg = err.response?.status === 403 
-                    ? 'Admin privileges required to perform this action.'
-                    : err.response?.data?.message || 'Failed to delete user.';
-                Swal.fire('Error!', errorMsg, 'error');
+                Swal.fire('Error!', err.response?.data?.message || 'Failed to delete user.', 'error');
             }
         }
     };
