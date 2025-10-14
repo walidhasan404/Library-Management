@@ -1,6 +1,6 @@
 import ReactRating from 'react-rating';
 
-const BorrowedBooksCard = ({ book, handleReturn }) => {
+const BorrowedBooksCard = ({ book, handleReturn, isAdmin }) => {
     const { _id, image, bookName, authorName, category, rating, email, borrowDate, returnDate } = book;
     const formattedBorrowDate = new Date(borrowDate).toDateString();
     const formattedReturnDate = new Date(returnDate).toDateString();
@@ -24,15 +24,17 @@ const BorrowedBooksCard = ({ book, handleReturn }) => {
                     />
                     <span className="ml-2 text-gray-600">{rating}</span>
                 </div>
-                <p className="text-gray-700 mb-2"><strong>Email:</strong> {email}</p>
+                <p className="text-gray-700 mb-2"><strong>Borrowed by:</strong> {email}</p>
                 <p className="text-gray-700 mb-2"><strong>Borrowed on:</strong> {formattedBorrowDate}</p>
-                <p className="text-gray-700 mb-4"><strong>Return by:</strong> {formattedReturnDate}</p>
-                <button
-                    className="btn btn-primary w-full"
-                    onClick={() => handleReturn(_id)}
-                >
-                    Return
-                </button>
+                <p className="text-gray-700 mb-4"><strong>Return by:</strong> <span className="text-red-600 font-semibold">{formattedReturnDate}</span></p>
+                {!isAdmin && (
+                    <button
+                        className="btn btn-primary w-full"
+                        onClick={() => handleReturn(_id)}
+                    >
+                        Return
+                    </button>
+                )}
             </div>
         </div>
     );

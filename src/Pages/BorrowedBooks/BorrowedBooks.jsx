@@ -46,8 +46,12 @@ const BorrowedBooks = () => {
                     const adminStatus = adminResponse.data.data?.admin || false;
                     setIsAdmin(adminStatus);
 
-                    // Fetch borrowed books
-                    const response = await axios.get(`${API_ENDPOINTS.BORROWED_BOOKS}?email=${user.email}`, {
+                    // Fetch borrowed books - admins get all, users get their own
+                    const endpoint = adminStatus 
+                        ? API_ENDPOINTS.ALL_BORROWED_BOOKS 
+                        : `${API_ENDPOINTS.BORROWED_BOOKS}?email=${user.email}`;
+                    
+                    const response = await axios.get(endpoint, {
                         headers: { Authorization: `Bearer ${token}` },
                         withCredentials: true
                     });
@@ -116,6 +120,7 @@ const BorrowedBooks = () => {
                             key={book._id}
                             book={book}
                             handleReturn={handleReturn}
+                            isAdmin={isAdmin}
                         />
                     ))}
                 </div>
