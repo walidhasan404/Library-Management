@@ -107,12 +107,13 @@ export const dataTransformers = {
   transformBook: (book) => ({
     _id: book._id,
     name: book.name,
-    author: book.author_name, // Backend uses author_name, frontend expects author
-    author_name: book.author_name,
+    author: book.author || book.author_name, // Use author if available, fallback to author_name
+    author_name: book.author_name || book.author, // Keep both for compatibility
     category: book.category,
     image: book.image,
-    rating: book.rating,
+    rating: book.rating || 0,
     description: book.description,
+    shortDescription: book.shortDescription,
     quantity: book.quantity || 1,
     available: book.available !== false, // Default to true if not specified
     isbn: book.isbn,
