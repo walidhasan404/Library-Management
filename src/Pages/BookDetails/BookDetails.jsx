@@ -157,9 +157,28 @@ const BookDetails = () => {
                             </div>
                             <div className="form-control">
                                 <label className="label">
-                                    <span className="label-text">Date</span>
+                                    <span className="label-text">Return Date</span>
                                 </label>
-                                <input type="date" required name="date" className="input input-bordered" defaultValue={new Date().toISOString().split('T')[0]} />
+                                <input 
+                                    type="date" 
+                                    required 
+                                    name="date" 
+                                    className="input input-bordered" 
+                                    min={new Date().toISOString().split('T')[0]}
+                                    max={(() => {
+                                        const maxDate = new Date();
+                                        maxDate.setMonth(maxDate.getMonth() + 1);
+                                        return maxDate.toISOString().split('T')[0];
+                                    })()}
+                                    defaultValue={(() => {
+                                        const defaultDate = new Date();
+                                        defaultDate.setDate(defaultDate.getDate() + 7);
+                                        return defaultDate.toISOString().split('T')[0];
+                                    })()} 
+                                />
+                                <label className="label">
+                                    <span className="label-text-alt text-gray-600">Max: 1 month from today</span>
+                                </label>
                             </div>
                             <div className="form-control">
                                 <label className="label">

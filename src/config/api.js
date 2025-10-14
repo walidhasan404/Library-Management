@@ -19,6 +19,7 @@ export const API_ENDPOINTS = {
   BORROWED_BOOKS: `${API_BASE_URL}/api/borrowed`,
   BORROW_BOOK: `${API_BASE_URL}/api/borrowed`,
   RETURN_BOOK: (id) => `${API_BASE_URL}/api/borrowed/${id}/return`,
+  UPDATE_RETURN_DATE: (id) => `${API_BASE_URL}/api/borrowed/${id}/return-date`,
   ALL_BORROWED_BOOKS: `${API_BASE_URL}/api/borrowed/all`,
   
   // Added Books (User Suggestions)

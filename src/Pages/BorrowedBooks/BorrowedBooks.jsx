@@ -4,6 +4,7 @@ import { AuthContext } from "../../Providers/AuthProvider";
 import BorrowedBooksCard from "./BorrowedBooksCard";
 import axios from "axios";
 import { API_ENDPOINTS, dataTransformers } from "../../config/api";
+import Swal from "sweetalert2";
 
 const BorrowedBooks = () => {
     const { user } = useContext(AuthContext);
@@ -23,10 +24,82 @@ const BorrowedBooks = () => {
                     withCredentials: true
                 }
             );
+            Swal.fire('Success!', 'Book returned successfully!', 'success');
             setBooks(prevBooks => prevBooks.filter(book => book._id !== id));
         } catch (err) {
             console.error('Error returning book:', err);
-            setError('Failed to return the book.');
+            Swal.fire('Error!', 'Failed to return the book.', 'error');
+        }
+    };
+
+    const handleEditReturnDate = async (bookId, currentReturnDate, editCount) => {
+        // Check if edit limit reached
+        if (editCount >= 2) {
+            Swal.fire('Limit Reached', 'You can only edit the return date 2 times.', 'warning');
+            return;
+        }
+
+        // Calculate max date (1 month from now)
+        const maxDate = new Date();
+        maxDate.setMonth(maxDate.getMonth() + 1);
+        const maxDateStr = maxDate.toISOString().split('T')[0];
+
+        // Get today's date for min date
+        const today = new Date().toISOString().split('T')[0];
+
+        const { value: newDate } = await Swal.fire({
+            title: 'Edit Return Date',
+            html: `
+                <p class="mb-4">Edits remaining: <strong>${2 - editCount}</strong></p>
+                <input type="date" id="return-date" class="swal2-input" 
+                    value="${new Date(currentReturnDate).toISOString().split('T')[0]}"
+                    min="${today}"
+                    max="${maxDateStr}">
+                <p class="text-sm text-gray-600 mt-2">Maximum: 1 month from today</p>
+            `,
+            showCancelButton: true,
+            confirmButtonText: 'Update',
+            preConfirm: () => {
+                const dateInput = document.getElementById('return-date').value;
+                if (!dateInput) {
+                    Swal.showValidationMessage('Please select a date');
+                    return false;
+                }
+                return dateInput;
+            }
+        });
+
+        if (newDate) {
+            try {
+                const token = localStorage.getItem('access-token');
+                const response = await axios.patch(
+                    API_ENDPOINTS.UPDATE_RETURN_DATE(bookId),
+                    { returnDate: newDate },
+                    {
+                        headers: { Authorization: `Bearer ${token}` },
+                        withCredentials: true
+                    }
+                );
+
+                if (response.data.success) {
+                    Swal.fire('Success!', 'Return date updated successfully!', 'success');
+                    // Refresh the list
+                    const endpoint = isAdmin 
+                        ? API_ENDPOINTS.ALL_BORROWED_BOOKS 
+                        : `${API_ENDPOINTS.BORROWED_BOOKS}?email=${user.email}`;
+                    
+                    const refreshResponse = await axios.get(endpoint, {
+                        headers: { Authorization: `Bearer ${token}` },
+                        withCredentials: true
+                    });
+                    const booksData = refreshResponse.data.data || refreshResponse.data;
+                    const transformedBooks = booksData.map(book => dataTransformers.transformBorrowedBook(book));
+                    setBooks(transformedBooks);
+                }
+            } catch (err) {
+                console.error('Error updating return date:', err);
+                Swal.fire('Error!', err.response?.data?.message || 'Failed to update return date.', 'error');
+            }
         }
     };
 
@@ -180,12 +253,21 @@ const BorrowedBooks = () => {
                                             </td>
                                             {!isAdmin && (
                                                 <td className="text-center">
-                                                    <button
-                                                        className="btn btn-sm btn-success"
-                                                        onClick={() => handleReturn(book._id)}
-                                                    >
-                                                        Return
-                                                    </button>
+                                                    <div className="flex gap-2 justify-center">
+                                                        <button
+                                                            className="btn btn-sm btn-info"
+                                                            onClick={() => handleEditReturnDate(book._id, book.returnDate, book.returnDateEditCount || 0)}
+                                                            title="Edit Return Date"
+                                                        >
+                                                            Edit Date
+                                                        </button>
+                                                        <button
+                                                            className="btn btn-sm btn-success"
+                                                            onClick={() => handleReturn(book._id)}
+                                                        >
+                                                            Return
+                                                        </button>
+                                                    </div>
                                                 </td>
                                             )}
                                         </tr>
