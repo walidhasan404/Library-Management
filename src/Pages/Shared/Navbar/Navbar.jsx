@@ -91,8 +91,8 @@ const Navbar = ({ handleTheme, theme }) => {
             </div>
             <div className="navbar-end">
                 <div className="flex items-center gap-2">
-                    <button onClick={handleTheme} className="btn btn-ghost btn-sm">
-                        <MdOutlineDarkMode className="text-lg" />
+                    <button onClick={handleTheme} className="btn btn-ghost btn-sm hover:bg-gray-200 dark:hover:bg-gray-700">
+                        <MdOutlineDarkMode className="text-2xl text-gray-700 dark:text-yellow-400" />
                     </button>
                     {user?.email ? (
                         <div className="dropdown dropdown-end">
