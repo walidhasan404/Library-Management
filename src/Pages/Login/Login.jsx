@@ -129,7 +129,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-slate-800 dark:via-slate-900 dark:to-slate-800 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
@@ -138,23 +138,23 @@ const Login = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
             </svg>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
-          <p className="text-gray-600">Sign in to your account to continue</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Welcome Back</h1>
+          <p className="text-gray-600 dark:text-gray-300">Sign in to your account to continue</p>
         </div>
 
         {/* Form Container */}
-        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
+        <div className="bg-white dark:bg-slate-700 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-600 p-8">
 
           {/* Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             {/* Email */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email Address</label>
               <input
                 type="email"
                 {...register("email", { required: "Email is required" })}
                 placeholder="Enter your email"
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder-gray-400"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-slate-500 dark:bg-slate-600 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder-gray-400 dark:placeholder-gray-300"
               />
               {errors.email && (
                 <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
@@ -163,17 +163,17 @@ const Login = () => {
 
             {/* Password */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Password</label>
               <div className="relative">
                 <input
                   type={showPass ? "text" : "password"}
                   {...register("password", { required: "Password is required" })}
                   placeholder="Enter your password"
-                  className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder-gray-400"
+                  className="w-full px-4 py-3 pr-12 border border-gray-300 dark:border-slate-500 dark:bg-slate-600 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder-gray-400 dark:placeholder-gray-300"
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-300 hover:text-gray-600 dark:hover:text-gray-100 transition-colors"
                   onClick={() => setShowPass(!showPass)}
                 >
                   {showPass ? <IoMdEyeOff size={20} /> : <IoMdEye size={20} />}
@@ -186,15 +186,15 @@ const Login = () => {
 
             {/* Captcha */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Security Verification</label>
-              <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Security Verification</label>
+              <div className="bg-gray-50 dark:bg-slate-600 rounded-xl p-4 border border-gray-200 dark:border-slate-500">
                 <LoadCanvasTemplate />
               </div>
               <input
                 onBlur={handleCaptcha}
                 name="captcha"
                 placeholder="Enter the text above"
-                className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder-gray-400"
+                className="mt-2 w-full px-4 py-3 border border-gray-300 dark:border-slate-500 dark:bg-slate-600 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder-gray-400 dark:placeholder-gray-300"
                 required
               />
             </div>
@@ -209,23 +209,23 @@ const Login = () => {
             </button>
 
             {logError && (
-              <div className="bg-red-50 border border-red-200 rounded-xl p-3">
-                <p className="text-red-600 text-sm text-center">{logError}</p>
+              <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 rounded-xl p-3">
+                <p className="text-red-600 dark:text-red-400 text-sm text-center">{logError}</p>
               </div>
             )}
           </form>
 
           {/* Divider */}
           <div className="my-6 flex items-center gap-4">
-            <hr className="flex-1 border-gray-200" />
-            <span className="text-sm font-medium text-gray-500">or continue with</span>
-            <hr className="flex-1 border-gray-200" />
+            <hr className="flex-1 border-gray-200 dark:border-slate-600" />
+            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">or continue with</span>
+            <hr className="flex-1 border-gray-200 dark:border-slate-600" />
           </div>
 
           {/* Google Sign-In */}
           <button
             onClick={handleGoogleSignIn}
-            className="w-full flex items-center justify-center gap-3 bg-white border-2 border-gray-200 text-gray-700 py-3 px-4 rounded-xl font-medium shadow-sm hover:shadow-md hover:border-gray-300 transition-all duration-200 group"
+            className="w-full flex items-center justify-center gap-3 bg-white dark:bg-slate-600 border-2 border-gray-200 dark:border-slate-500 text-gray-700 dark:text-gray-200 py-3 px-4 rounded-xl font-medium shadow-sm hover:shadow-md hover:border-gray-300 dark:hover:border-slate-400 transition-all duration-200 group"
           >
             <FaGoogle className="text-xl group-hover:scale-110 transition-transform" style={{color: '#4285F4'}} />
             <span>Continue with Google</span>
@@ -233,11 +233,11 @@ const Login = () => {
 
           {/* Sign Up Link */}
           <div className="text-center mt-6">
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-400">
               Don't have an account?{' '}
               <Link
                 to="/signup"
-                className="font-semibold text-blue-600 hover:text-blue-700 transition-colors"
+                className="font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
               >
                 Sign up here
               </Link>

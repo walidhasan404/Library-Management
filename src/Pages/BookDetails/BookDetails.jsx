@@ -116,17 +116,17 @@ const BookDetails = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 py-12 px-4">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-slate-800 dark:via-slate-900 dark:to-slate-800 py-12 px-4">
             <div className="container mx-auto max-w-6xl">
                 {/* Breadcrumb */}
                 <div className="mb-6">
-                    <Link to="/all" className="text-blue-600 hover:text-blue-700 font-medium">
+                    <Link to="/all" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium">
                         ← Back to All Books
                     </Link>
                 </div>
 
                 {/* Main Content */}
-                <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
+                <div className="bg-white dark:bg-slate-700 rounded-3xl shadow-2xl overflow-hidden">
                     <div className="grid md:grid-cols-2 gap-8 p-8">
                         {/* Left Side - Image */}
                         <div className="flex items-center justify-center">
@@ -146,11 +146,11 @@ const BookDetails = () => {
                                 <span className="inline-block px-4 py-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-sm font-semibold rounded-full mb-4">
                                     {category}
                                 </span>
-                                <h1 className="text-4xl font-bold text-gray-900 mb-4 leading-tight">
+                                <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
                                     {bookName}
                                 </h1>
-                                <p className="text-xl text-gray-600 mb-4">
-                                    by <span className="font-semibold text-gray-800">{author || author_name}</span>
+                                <p className="text-xl text-gray-600 dark:text-gray-300 mb-4">
+                                    by <span className="font-semibold text-gray-800 dark:text-gray-200">{author || author_name}</span>
                                 </p>
                             </div>
 
@@ -168,32 +168,32 @@ const BookDetails = () => {
                                         </svg>
                                     ))}
                                 </div>
-                                <span className="text-2xl font-bold text-gray-800">{rating}</span>
-                                <span className="text-gray-600">/ 5.0</span>
+                                <span className="text-2xl font-bold text-gray-800 dark:text-white">{rating}</span>
+                                <span className="text-gray-600 dark:text-gray-400">/ 5.0</span>
                             </div>
 
                             {/* Short Description */}
                             {shortDescription && (
-                                <div className="mb-4 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border-l-4 border-blue-500">
-                                    <p className="text-gray-700 leading-relaxed italic">{shortDescription}</p>
+                                <div className="mb-4 p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/30 dark:to-purple-900/30 rounded-xl border-l-4 border-blue-500 dark:border-blue-400">
+                                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed italic">{shortDescription}</p>
                                 </div>
                             )}
 
                             {/* Description */}
                             <div className="mb-6">
-                                <h3 className="text-lg font-semibold text-gray-800 mb-2">About This Book</h3>
-                                <p className="text-gray-600 leading-relaxed">{description || shortDescription || 'No description available.'}</p>
+                                <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">About This Book</h3>
+                                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">{description || shortDescription || 'No description available.'}</p>
                             </div>
 
                             {/* Availability */}
                             <div className="flex items-center gap-4 mb-8">
                                 <div className="flex items-center gap-2">
                                     <div className={`w-3 h-3 rounded-full ${book.quantity > 0 ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                                    <span className="font-semibold text-gray-800">
+                                    <span className="font-semibold text-gray-800 dark:text-gray-200">
                                         {book.quantity > 0 ? 'Available' : 'Not Available'}
                                     </span>
                                 </div>
-                                <div className="text-gray-600">
+                                <div className="text-gray-600 dark:text-gray-400">
                                     <span className="font-semibold">{book.quantity}</span> copies in stock
                                 </div>
                             </div>
@@ -222,13 +222,13 @@ const BookDetails = () => {
 
                             {/* Info Cards */}
                             <div className="grid grid-cols-2 gap-4 mt-6">
-                                <div className="bg-blue-50 rounded-xl p-4 text-center">
-                                    <p className="text-sm text-gray-600 mb-1">Category</p>
-                                    <p className="font-bold text-gray-800">{category}</p>
+                                <div className="bg-blue-50 dark:bg-blue-900/30 rounded-xl p-4 text-center">
+                                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Category</p>
+                                    <p className="font-bold text-gray-800 dark:text-gray-200">{category}</p>
                                 </div>
-                                <div className="bg-purple-50 rounded-xl p-4 text-center">
-                                    <p className="text-sm text-gray-600 mb-1">Rating</p>
-                                    <p className="font-bold text-gray-800">{rating} / 5.0</p>
+                                <div className="bg-purple-50 dark:bg-purple-900/30 rounded-xl p-4 text-center">
+                                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Rating</p>
+                                    <p className="font-bold text-gray-800 dark:text-gray-200">{rating} / 5.0</p>
                                 </div>
                             </div>
                         </div>
