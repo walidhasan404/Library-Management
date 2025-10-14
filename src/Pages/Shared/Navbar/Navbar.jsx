@@ -22,6 +22,7 @@ const Navbar = ({ handleTheme, theme }) => {
         
         {user?.email && (
             <>
+                <li><Link to="/dashboard">Dashboard</Link></li>
                 <li><Link to="/added">All Added Books</Link></li>
                 <li><Link to="/borrow">Borrowed Books</Link></li>
                 <li><Link to="/users">Users</Link></li>

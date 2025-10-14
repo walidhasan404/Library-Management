@@ -9,6 +9,7 @@ const BookDetails = () => {
     const book = useLoaderData();
     const { user } = useContext(AuthContext);
     const [isBorrowed, setIsBorrowed] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
     const { _id, image, name, author, author_name, category, description, rating } = book;
 
     useEffect(() => {
@@ -16,7 +17,20 @@ const BookDetails = () => {
             if (user?.email) {
                 try {
                     const token = localStorage.getItem('access-token');
-                    const response = await axios.get(API_ENDPOINTS.BORROWED_BOOKS, {
+                    
+                    // Check admin status
+                    const adminResponse = await axios.get(
+                        API_ENDPOINTS.CHECK_ADMIN(user.email),
+                        {
+                            headers: { Authorization: `Bearer ${token}` },
+                            withCredentials: true
+                        }
+                    );
+                    const adminStatus = adminResponse.data.data?.admin || false;
+                    setIsAdmin(adminStatus);
+                    
+                    // Check borrowed books
+                    const response = await axios.get(`${API_ENDPOINTS.BORROWED_BOOKS}?email=${user.email}`, {
                         headers: {
                             Authorization: `Bearer ${token}`
                         },
@@ -102,11 +116,11 @@ const BookDetails = () => {
                     <p className="text-base font-medium">Quantity: <span className="text-sm font-normal">{book.quantity}</span></p>
                     <div className="flex gap-2 justify-center">
                         <button 
-                            className={`btn bg-sky-200 hover:bg-sky-400 my-2 ${isBorrowed ? 'cursor-not-allowed opacity-50' : ''}`} 
+                            className={`btn bg-sky-200 hover:bg-sky-400 my-2 ${(isBorrowed || isAdmin) ? 'cursor-not-allowed opacity-50' : ''}`} 
                             onClick={handleBorrowBtn} 
-                            disabled={isBorrowed}
+                            disabled={isBorrowed || isAdmin}
                         >
-                            {isBorrowed ? 'Already Borrowed' : user ? 'Borrow' : 'Login to Borrow'}
+                            {isAdmin ? 'Admins Cannot Borrow' : isBorrowed ? 'Already Borrowed' : user ? 'Borrow' : 'Login to Borrow'}
                         </button>
                         {user?.email && (
                             <Link to={`/updateBook/${_id}`} className="btn bg-green-200 hover:bg-green-400 my-2">

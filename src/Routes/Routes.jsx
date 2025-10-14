@@ -15,6 +15,7 @@ import PrivateRoute from "./PrivateRoute";
 import BorrowedBooks from "../Pages/BorrowedBooks/BorrowedBooks";
 import AddedBooks from "../Pages/AddedBooks/AddedBooks";
 import Users from "../Pages/Users/Users";
+import Dashboard from "../Pages/Dashboard/Dashboard";
 import { API_ENDPOINTS } from "../config/api";
 
 const router = createBrowserRouter([
@@ -89,6 +90,10 @@ const router = createBrowserRouter([
             {
                 path: 'users',
                 element: <PrivateRoute><Users></Users></PrivateRoute>
+            },
+            {
+                path: 'dashboard',
+                element: <PrivateRoute><Dashboard></Dashboard></PrivateRoute>
             },
         ]
     }
