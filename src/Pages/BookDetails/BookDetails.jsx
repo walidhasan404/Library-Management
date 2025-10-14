@@ -10,7 +10,7 @@ const BookDetails = () => {
     const { user } = useContext(AuthContext);
     const [isBorrowed, setIsBorrowed] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
-    const { _id, image, name, author, author_name, category, description, rating } = book;
+    const { _id, image, name: bookName, author, author_name, category, description, rating } = book;
 
     useEffect(() => {
         const checkIfBorrowed = async () => {
@@ -81,7 +81,7 @@ const BookDetails = () => {
             bookId: _id,
             email,
             returnDate: date,
-            bookName: name,  // Use book's name, not form input
+            bookName: bookName,  // Use book's name variable
             authorName: author_name || author,
             category,
             image,
@@ -119,8 +119,8 @@ const BookDetails = () => {
         <div>
             <div className="mx-2 p-4">
                 <h3 className="my-4 text-2xl text-center font-bold">Book Details</h3>
-                <h3 className="text-center text-base font-medium my-2">{name}</h3>
-                <img className="mb-2 mx-auto w-96 h-96 object-cover" src={image} alt={name} />
+                <h3 className="text-center text-base font-medium my-2">{bookName}</h3>
+                <img className="mb-2 mx-auto w-96 h-96 object-cover" src={image} alt={bookName} />
                 <p className="text-center">{description}</p>
                 <div className="p-2 text-center">
                     <p className="text-base font-medium">Author: <span className="text-sm font-normal">{author || author_name}</span></p>
