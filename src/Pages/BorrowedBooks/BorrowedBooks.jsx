@@ -68,12 +68,12 @@ const BorrowedBooks = () => {
     if (!user) {
         return (
             <div className="p-8">
-                <h2 className="text-2xl text-center font-semibold mb-6">Your Borrowed Books</h2>
+                <h2 className="text-2xl text-center font-semibold mb-6">All Borrowed Books</h2>
                 <div className="text-center">
                     <div className="mb-6 p-6 bg-blue-50 border border-blue-200 rounded-lg max-w-md mx-auto">
                         <h3 className="text-lg font-semibold text-blue-800 mb-2">Login Required</h3>
                         <p className="text-blue-700 mb-4">
-                            Please log in to view and manage your borrowed books.
+                            Please log in to view and manage borrowed books.
                         </p>
                         <Link 
                             to="/login" 
@@ -89,9 +89,9 @@ const BorrowedBooks = () => {
 
     return (
         <div className="p-8">
-            <h2 className="text-2xl text-center font-semibold mb-6">Your Borrowed Books</h2>
+            <h2 className="text-2xl text-center font-semibold mb-6">All Borrowed Books</h2>
             {books.length === 0 ? (
-                <p className="text-center text-gray-500">You have not borrowed any books.</p>
+                <p className="text-center text-gray-500">No borrowed books found.</p>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {books.map(book => (
