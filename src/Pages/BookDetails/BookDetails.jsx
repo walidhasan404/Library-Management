@@ -135,11 +135,6 @@ const BookDetails = () => {
                         >
                             {isAdmin ? 'Admins Cannot Borrow' : isBorrowed ? 'Already Borrowed' : user ? 'Borrow' : 'Login to Borrow'}
                         </button>
-                        {user?.email && (
-                            <Link to={`/updateBook/${_id}`} className="btn bg-green-200 hover:bg-green-400 my-2">
-                                Update Book
-                            </Link>
-                        )}
                     </div>
                 </div>
             </div>

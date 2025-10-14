@@ -16,9 +16,9 @@ const BooksCard = ({ book }) => {
                         <span className="font-semibold">Available:</span> {quantity}
                     </p>
                     <div className="card-actions mt-4">
-                        <Link to={`/updateBook/${_id}`}>
+                        <Link to={`/book/${_id}`}>
                             <button className="btn bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-full transition duration-300">
-                                Update
+                                View Details
                             </button>
                         </Link>
                     </div>
