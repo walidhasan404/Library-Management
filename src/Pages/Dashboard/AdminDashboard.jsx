@@ -69,15 +69,15 @@ const AdminDashboard = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4">
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-800 dark:to-slate-900 py-12 px-4">
             <div className="container mx-auto">
                 {/* Header */}
                 <div className="text-center mb-12">
                     <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-4 shadow-lg">
                         <FaUsers className="text-3xl text-white" />
                     </div>
-                    <h1 className="text-4xl font-bold text-gray-800 mb-2">Admin Dashboard</h1>
-                    <p className="text-gray-600 text-lg">Welcome back, {user?.displayName || user?.email}</p>
+                    <h1 className="text-4xl font-bold text-gray-800 dark:text-white mb-2">Admin Dashboard</h1>
+                    <p className="text-gray-600 dark:text-gray-300 text-lg">Welcome back, {user?.displayName || user?.email}</p>
                     <div className="mt-2">
                         <span className="inline-block px-4 py-1 bg-gradient-to-r from-yellow-400 to-yellow-500 text-white rounded-full text-sm font-semibold shadow-md">
                             Administrator
@@ -105,37 +105,37 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* Quick Actions */}
-                <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
-                    <h2 className="text-2xl font-bold text-gray-800 mb-6">Quick Actions</h2>
+                <div className="bg-white dark:bg-slate-700 rounded-2xl shadow-lg p-8 mb-8">
+                    <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">Quick Actions</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <Link
                             to="/all"
-                            className="flex items-center gap-3 p-4 bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors"
+                            className="flex items-center gap-3 p-4 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 rounded-xl transition-colors"
                         >
-                            <FaBook className="text-2xl text-blue-600" />
+                            <FaBook className="text-2xl text-blue-600 dark:text-blue-400" />
                             <div>
-                                <h3 className="font-semibold text-gray-800">View All Books</h3>
-                                <p className="text-sm text-gray-600">Browse the library</p>
+                                <h3 className="font-semibold text-gray-800 dark:text-gray-200">View All Books</h3>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">Browse the library</p>
                             </div>
                         </Link>
                         <Link
                             to="/add"
-                            className="flex items-center gap-3 p-4 bg-green-50 hover:bg-green-100 rounded-xl transition-colors"
+                            className="flex items-center gap-3 p-4 bg-green-50 dark:bg-green-900/30 hover:bg-green-100 dark:hover:bg-green-900/50 rounded-xl transition-colors"
                         >
-                            <FaPlus className="text-2xl text-green-600" />
+                            <FaPlus className="text-2xl text-green-600 dark:text-green-400" />
                             <div>
-                                <h3 className="font-semibold text-gray-800">Suggest Books</h3>
-                                <p className="text-sm text-gray-600">Add new suggestions</p>
+                                <h3 className="font-semibold text-gray-800 dark:text-gray-200">Suggest Books</h3>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">Add new suggestions</p>
                             </div>
                         </Link>
                         <Link
                             to="/users"
-                            className="flex items-center gap-3 p-4 bg-orange-50 hover:bg-orange-100 rounded-xl transition-colors"
+                            className="flex items-center gap-3 p-4 bg-orange-50 dark:bg-orange-900/30 hover:bg-orange-100 dark:hover:bg-orange-900/50 rounded-xl transition-colors"
                         >
-                            <FaUsers className="text-2xl text-orange-600" />
+                            <FaUsers className="text-2xl text-orange-600 dark:text-orange-400" />
                             <div>
-                                <h3 className="font-semibold text-gray-800">Manage Users</h3>
-                                <p className="text-sm text-gray-600">User administration</p>
+                                <h3 className="font-semibold text-gray-800 dark:text-gray-200">Manage Users</h3>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">User administration</p>
                             </div>
                         </Link>
                     </div>

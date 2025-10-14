@@ -151,15 +151,15 @@ const Users = () => {
 
     if (error) {
         return (
-            <div className="flex justify-center items-center min-h-screen bg-gray-50">
-                <div className="text-center max-w-md p-8 bg-white rounded-lg shadow-lg">
+            <div className="flex justify-center items-center min-h-screen bg-gray-50 dark:bg-slate-800">
+                <div className="text-center max-w-md p-8 bg-white dark:bg-slate-700 rounded-lg shadow-lg">
                     <div className="mb-4">
                         <svg className="w-16 h-16 mx-auto text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                         </svg>
                     </div>
-                    <h2 className="text-2xl font-bold text-gray-800 mb-4">Error Loading Users</h2>
-                    <p className="text-red-600 text-lg mb-6">{error}</p>
+                    <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">Error Loading Users</h2>
+                    <p className="text-red-600 dark:text-red-400 text-lg mb-6">{error}</p>
                     <button 
                         onClick={fetchUsers}
                         className="btn btn-primary"
@@ -174,11 +174,11 @@ const Users = () => {
     return (
         <div className="container mx-auto px-4 py-8">
             <div className="mb-8">
-                <h1 className="text-4xl font-bold text-center text-gray-800 mb-2">Users Management</h1>
-                <p className="text-center text-gray-600">Manage all registered users</p>
+                <h1 className="text-4xl font-bold text-center text-gray-800 dark:text-white mb-2">Users Management</h1>
+                <p className="text-center text-gray-600 dark:text-gray-300">Manage all registered users</p>
             </div>
 
-            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div className="bg-white dark:bg-slate-700 rounded-lg shadow-lg overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="table table-zebra w-full">
                         <thead className="bg-blue-600 text-white">

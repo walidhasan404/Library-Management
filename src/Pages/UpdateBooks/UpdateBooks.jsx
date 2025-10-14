@@ -87,13 +87,13 @@ const UpdateBooks = () => {
 
 
     return (
-        <div className="m-4 p-2 bg-blue-50">
-            <h2 className="text-center text-xl font-semibold">Update this book</h2>
+        <div className="m-4 p-2 bg-blue-50 dark:bg-slate-800 min-h-screen">
+            <h2 className="text-center text-xl font-semibold text-gray-800 dark:text-white">Update this book</h2>
             
-            <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                <p className="text-yellow-800 text-center">
+            <div className="mb-4 p-3 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700 rounded-lg">
+                <p className="text-yellow-800 dark:text-yellow-200 text-center">
                     <strong>Note:</strong> You need to be logged in to update books. 
-                    <Link to="/login" className="text-yellow-600 hover:underline ml-1">
+                    <Link to="/login" className="text-yellow-600 dark:text-yellow-400 hover:underline ml-1">
                         Click here to login
                     </Link>
                 </p>
@@ -103,24 +103,24 @@ const UpdateBooks = () => {
                 <div>
                     <div className="flex gap-3 mb-4">
                         <div className="w-1/2">
-                            <label className="input input-bordered flex items-center w-full gap-2">
-                                <input name="name" defaultValue={name} type="text" className="grow" placeholder="Name" />
+                            <label className="input input-bordered dark:bg-slate-600 dark:border-slate-500 flex items-center w-full gap-2">
+                                <input name="name" defaultValue={name} type="text" className="grow dark:text-white" placeholder="Name" />
                             </label>
                         </div>
                         <div className="w-1/2">
-                            <label className="input input-bordered flex items-center w-full gap-2">
-                                <input name="author" defaultValue={author_name || author} type="text" className="grow" placeholder="Author Name" />
+                            <label className="input input-bordered dark:bg-slate-600 dark:border-slate-500 flex items-center w-full gap-2">
+                                <input name="author" defaultValue={author_name || author} type="text" className="grow dark:text-white" placeholder="Author Name" />
                             </label>
                         </div>
                     </div>
                     <div className="flex gap-3 mb-4">
                         <div className="w-1/2">
-                            <label className="input input-bordered flex items-center w-full gap-2">
-                                <input name="image" defaultValue={image} type="text" className="grow" placeholder="Image URL" />
+                            <label className="input input-bordered dark:bg-slate-600 dark:border-slate-500 flex items-center w-full gap-2">
+                                <input name="image" defaultValue={image} type="text" className="grow dark:text-white" placeholder="Image URL" />
                             </label>
                         </div>
                         <div className="w-1/2">
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Category</label>
                             <div className="flex flex-wrap gap-2">
                                 {categories.map((cat) => (
                                     <button
@@ -130,7 +130,7 @@ const UpdateBooks = () => {
                                         className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                                             selectedCategory === cat
                                                 ? 'bg-blue-500 text-white shadow-md'
-                                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                                : 'bg-gray-100 dark:bg-slate-600 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-500'
                                         }`}
                                     >
                                         {cat}
@@ -142,7 +142,7 @@ const UpdateBooks = () => {
                     </div>
                     <div className="flex gap-3 mb-4">
                         <div className="w-1/2">
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Rating</label>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Rating</label>
                             <input 
                                 name="rating" 
                                 defaultValue={rating} 
@@ -150,7 +150,7 @@ const UpdateBooks = () => {
                                 min="0" 
                                 max="5" 
                                 step="0.1" 
-                                className="input input-bordered w-full" 
+                                className="input input-bordered dark:bg-slate-600 dark:border-slate-500 dark:text-white w-full" 
                                 placeholder="Rating (0.0-5.0)" 
                             />
                         </div>
