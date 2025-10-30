@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { API_ENDPOINTS } from '../../config/api';
 import Swal from 'sweetalert2';
+import LoadingSpinner from '../../Components/LoadingSpinner';
 
 const Users = () => {
     const [users, setUsers] = useState([]);
@@ -139,14 +140,7 @@ const Users = () => {
     };
 
     if (loading) {
-        return (
-            <div className="flex justify-center items-center min-h-screen">
-                <div className="text-center">
-                    <div className="loading loading-spinner loading-lg text-primary"></div>
-                    <p className="mt-4 text-gray-600">Loading users...</p>
-                </div>
-            </div>
-        );
+        return <LoadingSpinner size="large" text="Loading users..." />;
     }
 
     if (error) {

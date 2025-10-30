@@ -6,6 +6,7 @@ import { IoIosCard } from "react-icons/io";
 import { API_ENDPOINTS, dataTransformers } from "../../config/api";
 import { AuthContext } from "../../Providers/AuthProvider";
 import axios from "axios";
+import LoadingSpinner from "../../Components/LoadingSpinner";
 
 const AllBooks = () => {
     const { user } = useContext(AuthContext);
@@ -109,9 +110,7 @@ const AllBooks = () => {
             
             {/* Loading State */}
             {loading && (
-                <div className="flex justify-center items-center py-12">
-                    <div className="loading loading-spinner loading-lg text-blue-600"></div>
-                </div>
+                <LoadingSpinner text="Loading books..." />
             )}
 
             {/* Books Display */}

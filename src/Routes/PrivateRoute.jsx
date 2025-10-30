@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { AuthContext } from "../Providers/AuthProvider";
 import { Navigate, useLocation } from "react-router-dom";
+import LoadingSpinner from "../Components/LoadingSpinner";
 
 
 const PrivateRoute = ({children}) => {
@@ -9,7 +10,7 @@ const PrivateRoute = ({children}) => {
     const location = useLocation();
 
     if(loading) {
-        return <progress className="progress progress-success w-56" value="10" max="100"></progress>;
+        return <LoadingSpinner text="Checking authentication..." />;
     }
 
     if(user?.email){

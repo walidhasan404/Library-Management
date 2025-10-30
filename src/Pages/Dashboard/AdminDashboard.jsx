@@ -1,17 +1,21 @@
 import { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../Providers/AuthProvider';
-import { FaBook, FaUsers, FaBookReader, FaSignOutAlt, FaPlus, FaEdit } from 'react-icons/fa';
+import { FaBook, FaUsers, FaBookReader, FaSignOutAlt, FaPlus, FaEdit, FaClock } from 'react-icons/fa';
 import axios from 'axios';
 import { API_ENDPOINTS, dataTransformers } from '../../config/api';
+import Swal from 'sweetalert2';
+import LoadingSpinner from '../../Components/LoadingSpinner';
 
 const AdminDashboard = () => {
     const { user, logOut } = useContext(AuthContext);
     const [books, setBooks] = useState([]);
+    const [pendingReturns, setPendingReturns] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         fetchBooks();
+        fetchPendingReturns();
     }, []);
 
     const fetchBooks = async () => {
@@ -24,6 +28,40 @@ const AdminDashboard = () => {
             console.error('Error fetching books:', error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const fetchPendingReturns = async () => {
+        try {
+            const token = localStorage.getItem('access-token');
+            const response = await axios.get(API_ENDPOINTS.PENDING_RETURNS, {
+                headers: { Authorization: `Bearer ${token}` },
+                withCredentials: true
+            });
+            const returnsData = response.data.data || [];
+            setPendingReturns(returnsData);
+        } catch (error) {
+            console.error('Error fetching pending returns:', error);
+        }
+    };
+
+    const handleConfirmReturn = async (borrowId) => {
+        try {
+            const token = localStorage.getItem('access-token');
+            await axios.patch(
+                API_ENDPOINTS.CONFIRM_RETURN(borrowId),
+                { status: 'returned' },
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                    withCredentials: true
+                }
+            );
+            Swal.fire('Success!', 'Book return confirmed successfully.', 'success');
+            // Refresh pending returns
+            fetchPendingReturns();
+        } catch (error) {
+            console.error('Error confirming return:', error);
+            Swal.fire('Error!', 'Failed to confirm return.', 'error');
         }
     };
 
@@ -84,6 +122,35 @@ const AdminDashboard = () => {
                         </span>
                     </div>
                 </div>
+
+                {/* Pending Returns Section */}
+                {pendingReturns.length > 0 && (
+                    <div className="bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl shadow-xl p-6 mb-8">
+                        <div className="flex items-center gap-3 mb-4">
+                            <FaClock className="text-3xl text-white" />
+                            <div>
+                                <h2 className="text-2xl font-bold text-white">Pending Return Requests</h2>
+                                <p className="text-white/90 text-sm">{pendingReturns.length} request{pendingReturns.length > 1 ? 's' : ''} awaiting confirmation</p>
+                            </div>
+                        </div>
+                        <div className="bg-white/90 dark:bg-slate-800/90 rounded-xl p-4 mb-2">
+                            <p className="text-sm text-gray-700 dark:text-gray-300 font-semibold mb-2">
+                                {pendingReturns[0]?.bookName || 'Book'} - Return Request from {pendingReturns[0]?.user?.name || pendingReturns[0]?.email}
+                            </p>
+                            <button
+                                onClick={() => handleConfirmReturn(pendingReturns[0]._id)}
+                                className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-6 py-2 rounded-lg font-semibold shadow-md transition-all duration-300 transform hover:scale-105"
+                            >
+                                Confirm Return
+                            </button>
+                        </div>
+                        {pendingReturns.length > 1 && (
+                            <p className="text-white text-sm text-center mt-2">
+                                + {pendingReturns.length - 1} more request{pendingReturns.length > 2 ? 's' : ''}
+                            </p>
+                        )}
+                    </div>
+                )}
 
                 {/* Dashboard Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

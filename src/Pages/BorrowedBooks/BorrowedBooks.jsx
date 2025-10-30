@@ -5,6 +5,7 @@ import BorrowedBooksCard from "./BorrowedBooksCard";
 import axios from "axios";
 import { API_ENDPOINTS, dataTransformers } from "../../config/api";
 import Swal from "sweetalert2";
+import LoadingSpinner from "../../Components/LoadingSpinner";
 
 const BorrowedBooks = () => {
     const { user } = useContext(AuthContext);
@@ -16,7 +17,7 @@ const BorrowedBooks = () => {
     const handleReturn = async (id) => {
         try {
             const token = localStorage.getItem('access-token');
-            await axios.patch(
+            const response = await axios.patch(
                 API_ENDPOINTS.RETURN_BOOK(id),
                 {},
                 {
@@ -24,11 +25,18 @@ const BorrowedBooks = () => {
                     withCredentials: true
                 }
             );
-            Swal.fire('Success!', 'Book returned successfully!', 'success');
-            setBooks(prevBooks => prevBooks.filter(book => book._id !== id));
+            Swal.fire('Success!', 'Return request submitted. Waiting for admin confirmation.', 'success');
+            // Update the book status to return_pending
+            setBooks(prevBooks => 
+                prevBooks.map(book => 
+                    book._id === id 
+                        ? { ...book, status: 'return_pending' } 
+                        : book
+                )
+            );
         } catch (err) {
             console.error('Error returning book:', err);
-            Swal.fire('Error!', 'Failed to return the book.', 'error');
+            Swal.fire('Error!', err.response?.data?.message || 'Failed to submit return request.', 'error');
         }
     };
 
@@ -147,7 +155,7 @@ const BorrowedBooks = () => {
     }, [user?.email]);
 
     if (loading) {
-        return <div className="text-center">Loading...</div>;
+        return <LoadingSpinner text="Loading borrowed books..." />;
     }
 
     if (error) {
@@ -186,6 +194,14 @@ const BorrowedBooks = () => {
                 <p className="text-center text-gray-600">
                     {isAdmin ? 'View all borrowed books from all users' : 'Manage your borrowed books'}
                 </p>
+                {isAdmin && (
+                    <div className="mt-4 text-center">
+                        <span className="inline-flex items-center gap-2 bg-yellow-100 text-yellow-800 px-4 py-2 rounded-full">
+                            <span className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></span>
+                            Pending Returns: {books.filter(book => book.status === 'return_pending').length}
+                        </span>
+                    </div>
+                )}
             </div>
 
             {books.length === 0 ? (
@@ -209,9 +225,10 @@ const BorrowedBooks = () => {
                                     <th>Category</th>
                                     <th>Rating</th>
                                     <th>Borrowed By</th>
+                                    <th>Status</th>
                                     <th>Borrow Date</th>
                                     <th>Return Date</th>
-                                    {!isAdmin && <th className="text-center">Action</th>}
+                                    {isAdmin ? <th className="text-center">Action</th> : <th className="text-center">Action</th>}
                                 </tr>
                             </thead>
                             <tbody>
@@ -244,6 +261,17 @@ const BorrowedBooks = () => {
                                                 </div>
                                             </td>
                                             <td className="text-sm">{book.userName || book.email}</td>
+                                            <td>
+                                                {book.status === 'return_pending' && (
+                                                    <span className="badge badge-warning badge-sm">Pending Return</span>
+                                                )}
+                                                {book.status === 'borrowed' && (
+                                                    <span className="badge badge-success badge-sm">Borrowed</span>
+                                                )}
+                                                {book.status === 'returned' && (
+                                                    <span className="badge badge-secondary badge-sm">Returned</span>
+                                                )}
+                                            </td>
                                             <td>{formattedBorrowDate}</td>
                                             <td>
                                                 <span className={`font-semibold ${isOverdue ? 'text-red-600' : 'text-green-600'}`}>
@@ -251,25 +279,101 @@ const BorrowedBooks = () => {
                                                     {isOverdue && <span className="ml-1 text-xs">(Overdue)</span>}
                                                 </span>
                                             </td>
-                                            {!isAdmin && (
-                                                <td className="text-center">
+                                            <td className="text-center">
+                                                {isAdmin ? (
+                                                    // Admin actions
                                                     <div className="flex gap-2 justify-center">
-                                                        <button
-                                                            className="btn btn-sm btn-info"
-                                                            onClick={() => handleEditReturnDate(book._id, book.returnDate, book.returnDateEditCount || 0)}
-                                                            title="Edit Return Date"
-                                                        >
-                                                            Edit Date
-                                                        </button>
-                                                        <button
-                                                            className="btn btn-sm btn-success"
-                                                            onClick={() => handleReturn(book._id)}
-                                                        >
-                                                            Return
-                                                        </button>
+                                                                                                            {book.status === 'return_pending' && (
+                                                        <>
+                                                            <button
+                                                                className="btn btn-sm btn-success"
+                                                                onClick={async () => {
+                                                                    try {
+                                                                        const token = localStorage.getItem('access-token');
+                                                                        await axios.patch(
+                                                                            API_ENDPOINTS.CONFIRM_RETURN(book._id),
+                                                                            { status: 'returned' },
+                                                                            {
+                                                                                headers: { Authorization: `Bearer ${token}` },
+                                                                                withCredentials: true
+                                                                            }
+                                                                        );
+                                                                        Swal.fire('Success!', 'Return confirmed! Book quantity increased.', 'success');
+                                                                        // Remove from list
+                                                                        setBooks(prevBooks => prevBooks.filter(b => b._id !== book._id));
+                                                                    } catch (err) {
+                                                                        console.error('Error confirming return:', err);
+                                                                        Swal.fire('Error!', 'Failed to confirm return.', 'error');
+                                                                    }
+                                                                }}
+                                                            >
+                                                                Confirm Return
+                                                            </button>
+                                                            <button
+                                                                className="btn btn-sm btn-error"
+                                                                onClick={async () => {
+                                                                    const result = await Swal.fire({
+                                                                        title: 'Are you sure?',
+                                                                        text: 'This will reject the return request and keep the book as borrowed.',
+                                                                        icon: 'warning',
+                                                                        showCancelButton: true,
+                                                                        confirmButtonText: 'Yes, reject it!',
+                                                                        cancelButtonText: 'Cancel'
+                                                                    });
+
+                                                                    if (result.isConfirmed) {
+                                                                        try {
+                                                                            const token = localStorage.getItem('access-token');
+                                                                            await axios.patch(
+                                                                                API_ENDPOINTS.CONFIRM_RETURN(book._id),
+                                                                                { status: 'borrowed' },
+                                                                                {
+                                                                                    headers: { Authorization: `Bearer ${token}` },
+                                                                                    withCredentials: true
+                                                                                }
+                                                                            );
+                                                                            Swal.fire('Rejected!', 'Return request has been rejected.', 'success');
+                                                                            // Update status back to borrowed
+                                                                            setBooks(prevBooks => 
+                                                                                prevBooks.map(b => 
+                                                                                    b._id === book._id 
+                                                                                        ? { ...b, status: 'borrowed' } 
+                                                                                        : b
+                                                                                )
+                                                                            );
+                                                                        } catch (err) {
+                                                                            console.error('Error rejecting return:', err);
+                                                                            Swal.fire('Error!', 'Failed to reject return.', 'error');
+                                                                        }
+                                                                    }
+                                                                }}
+                                                            >
+                                                                Reject
+                                                            </button>
+                                                        </>
+                                                    )}
                                                     </div>
-                                                </td>
-                                            )}
+                                                ) : (
+                                                    // User actions
+                                                    book.status === 'borrowed' && (
+                                                        <div className="flex gap-2 justify-center">
+                                                            <button
+                                                                className="btn btn-sm btn-info"
+                                                                onClick={() => handleEditReturnDate(book._id, book.returnDate, book.returnDateEditCount || 0)}
+                                                                title="Edit Return Date"
+                                                            >
+                                                                Edit Date
+                                                            </button>
+                                                            <button
+                                                                className="btn btn-sm btn-success"
+                                                                onClick={() => handleReturn(book._id)}
+                                                            >
+                                                                Return
+                                                            </button>
+                                                        </div>
+                                                    )
+                                                )}
+                                            </td>
                                         </tr>
                                     );
                                 })}

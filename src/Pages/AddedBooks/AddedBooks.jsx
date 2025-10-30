@@ -3,13 +3,16 @@ import AddedBooksCard from './AddedBooksCard';
 import { AuthContext } from '../../Providers/AuthProvider';
 import axios from 'axios';
 import { API_ENDPOINTS, dataTransformers } from '../../config/api';
+import LoadingSpinner from '../../Components/LoadingSpinner';
 
 const AddedBooks = () => {
   const { user } = useContext(AuthContext);
   const [books, setBooks] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (user?.email) {
+      setLoading(true);
       const token = localStorage.getItem('access-token');
       axios.get(`${API_ENDPOINTS.ADDED_BOOKS}?email=${encodeURIComponent(user.email)}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -23,9 +26,16 @@ const AddedBooks = () => {
         })
         .catch(error => {
           console.error('Error fetching added books:', error);
+        })
+        .finally(() => {
+          setLoading(false);
         });
     }
   }, [user]);
+
+  if (loading) {
+    return <LoadingSpinner text="Loading your added books..." />;
+  }
 
   return (
     <div className='bg-lime-50 p-2'>

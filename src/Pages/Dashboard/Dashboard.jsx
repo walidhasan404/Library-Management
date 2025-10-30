@@ -4,6 +4,7 @@ import { API_ENDPOINTS } from '../../config/api';
 import axios from 'axios';
 import AdminDashboard from './AdminDashboard';
 import UserDashboard from './UserDashboard';
+import LoadingSpinner from '../../Components/LoadingSpinner';
 
 const Dashboard = () => {
     const { user } = useContext(AuthContext);
@@ -40,14 +41,7 @@ const Dashboard = () => {
     }, [user]);
 
     if (loading) {
-        return (
-            <div className="flex justify-center items-center min-h-screen">
-                <div className="text-center">
-                    <div className="loading loading-spinner loading-lg text-primary"></div>
-                    <p className="mt-4 text-gray-600">Loading dashboard...</p>
-                </div>
-            </div>
-        );
+        return <LoadingSpinner size="large" text="Loading dashboard..." />;
     }
 
     return isAdmin ? <AdminDashboard /> : <UserDashboard />;
