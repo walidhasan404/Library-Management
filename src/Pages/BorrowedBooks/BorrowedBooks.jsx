@@ -217,18 +217,18 @@ const BorrowedBooks = () => {
                 <div className="bg-white rounded-lg shadow-lg overflow-hidden">
                     <div className="overflow-x-auto">
                         <table className="table table-zebra w-full">
-                            <thead className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+                            <thead className="bg-gradient-to-r from-purple-600 to-purple-700 text-white">
                                 <tr>
-                                    <th className="text-center">#</th>
-                                    <th>Book Name</th>
-                                    <th>Author</th>
-                                    <th>Category</th>
-                                    <th>Rating</th>
-                                    <th>Borrowed By</th>
-                                    <th>Status</th>
-                                    <th>Borrow Date</th>
-                                    <th>Return Date</th>
-                                    {isAdmin ? <th className="text-center">Action</th> : <th className="text-center">Action</th>}
+                                    <th className="text-center font-semibold py-4">#</th>
+                                    <th className="font-semibold py-4">Book Name</th>
+                                    <th className="font-semibold py-4">Author</th>
+                                    <th className="font-semibold py-4">Category</th>
+                                    <th className="font-semibold py-4">Rating</th>
+                                    <th className="font-semibold py-4">Borrowed By</th>
+                                    <th className="font-semibold py-4">Status</th>
+                                    <th className="font-semibold py-4">Borrow Date</th>
+                                    <th className="font-semibold py-4">Return Date</th>
+                                    <th className="text-center font-semibold py-4">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -263,13 +263,19 @@ const BorrowedBooks = () => {
                                             <td className="text-sm">{book.userName || book.email}</td>
                                             <td>
                                                 {book.status === 'return_pending' && (
-                                                    <span className="badge badge-warning badge-sm">Pending Return</span>
+                                                    <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800 border border-yellow-200 whitespace-nowrap">
+                                                        Pending Return
+                                                    </span>
                                                 )}
                                                 {book.status === 'borrowed' && (
-                                                    <span className="badge badge-success badge-sm">Borrowed</span>
+                                                    <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-green-100 text-green-800 border border-green-200 whitespace-nowrap">
+                                                        Borrowed
+                                                    </span>
                                                 )}
                                                 {book.status === 'returned' && (
-                                                    <span className="badge badge-secondary badge-sm">Returned</span>
+                                                    <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-800 border border-gray-200 whitespace-nowrap">
+                                                        Returned
+                                                    </span>
                                                 )}
                                             </td>
                                             <td>{formattedBorrowDate}</td>
