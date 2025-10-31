@@ -9,7 +9,8 @@ const BookDetails = () => {
     const book = useLoaderData();
     const { user } = useContext(AuthContext);
     const [isBorrowed, setIsBorrowed] = useState(false);
-    const [isAdmin, setIsAdmin] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(null); // null = checking, true/false = known
+    const [checkingStatus, setCheckingStatus] = useState(true);
     const { _id, image, name: bookName, author, author_name, category, description, shortDescription, rating } = book;
 
     useEffect(() => {
@@ -18,30 +19,53 @@ const BookDetails = () => {
                 try {
                     const token = localStorage.getItem('access-token');
                     
-                    // Check admin status
-                    const adminResponse = await axios.get(
-                        API_ENDPOINTS.CHECK_ADMIN(user.email),
-                        {
-                            headers: { Authorization: `Bearer ${token}` },
-                            withCredentials: true
+                    // Check admin status first - prioritize this check
+                    if (token) {
+                        try {
+                            const adminResponse = await axios.get(
+                                API_ENDPOINTS.CHECK_ADMIN(user.email),
+                                {
+                                    headers: { Authorization: `Bearer ${token}` },
+                                    withCredentials: true
+                                }
+                            );
+                            const adminStatus = adminResponse.data.data?.admin || false;
+                            setIsAdmin(adminStatus);
+                            setCheckingStatus(false);
+                            
+                            // If admin, don't check borrowed status
+                            if (adminStatus) {
+                                return;
+                            }
+                            
+                            // Check borrowed books only if not admin
+                            const response = await axios.get(`${API_ENDPOINTS.BORROWED_BOOKS}?email=${user.email}`, {
+                                headers: {
+                                    Authorization: `Bearer ${token}`
+                                },
+                                withCredentials: true
+                            });
+                            const borrowedBooks = response.data.data || response.data;
+                            const isAlreadyBorrowed = borrowedBooks.some(borrowedBook => borrowedBook.book === _id);
+                            setIsBorrowed(isAlreadyBorrowed);
+                        } catch (error) {
+                            console.error('Error checking admin status:', error);
+                            setIsAdmin(false);
+                            setCheckingStatus(false);
                         }
-                    );
-                    const adminStatus = adminResponse.data.data?.admin || false;
-                    setIsAdmin(adminStatus);
-                    
-                    // Check borrowed books
-                    const response = await axios.get(`${API_ENDPOINTS.BORROWED_BOOKS}?email=${user.email}`, {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        },
-                        withCredentials: true
-                    });
-                    const borrowedBooks = response.data.data || response.data;
-                    const isAlreadyBorrowed = borrowedBooks.some(borrowedBook => borrowedBook.book === _id);
-                    setIsBorrowed(isAlreadyBorrowed);
+                    } else {
+                        setIsAdmin(false);
+                        setCheckingStatus(false);
+                    }
                 } catch (error) {
-                    console.error('Error checking borrowed books:', error);
+                    console.error('Error checking status:', error);
+                    setIsAdmin(false);
+                    setCheckingStatus(false);
                 }
+            } else {
+                // No user logged in
+                setIsAdmin(false);
+                setCheckingStatus(false);
             }
         };
 
@@ -200,23 +224,29 @@ const BookDetails = () => {
 
                             {/* Action Button */}
                             <div className="flex gap-3">
-                                {!isAdmin && (
-                        <button 
-                                        className={`flex-1 py-4 px-6 rounded-xl font-semibold text-lg shadow-lg transition-all duration-300 ${
-                                            (isBorrowed || isAdmin || book.quantity === 0) 
-                                                ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
-                                                : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:shadow-xl hover:scale-105'
-                                        }`}
-                            onClick={handleBorrowBtn} 
-                                        disabled={isBorrowed || isAdmin || book.quantity === 0}
-                        >
-                                        {isBorrowed ? '✓ Already Borrowed' : book.quantity === 0 ? 'Out of Stock' : user ? '📚 Borrow This Book' : '🔐 Login to Borrow'}
-                        </button>
-                                )}
-                                {isAdmin && (
+                                {checkingStatus ? (
+                                    // Show loading state while checking admin status
+                                    <div className="flex-1 py-4 px-6 rounded-xl font-semibold text-lg bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 text-center animate-pulse">
+                                        Checking...
+                                    </div>
+                                ) : isAdmin ? (
+                                    // Show admin view only
                                     <div className="flex-1 py-4 px-6 rounded-xl font-semibold text-lg bg-gradient-to-r from-gray-400 to-gray-500 text-white text-center">
                                         👑 Admin View Only
                                     </div>
+                                ) : (
+                                    // Show borrow button for non-admins
+                                    <button 
+                                        className={`flex-1 py-4 px-6 rounded-xl font-semibold text-lg shadow-lg transition-all duration-300 ${
+                                            (isBorrowed || book.quantity === 0) 
+                                                ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+                                                : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:shadow-xl hover:scale-105'
+                                        }`}
+                                        onClick={handleBorrowBtn} 
+                                        disabled={isBorrowed || book.quantity === 0}
+                                    >
+                                        {isBorrowed ? '✓ Already Borrowed' : book.quantity === 0 ? 'Out of Stock' : user ? '📚 Borrow This Book' : '🔐 Login to Borrow'}
+                                    </button>
                                 )}
                             </div>
 

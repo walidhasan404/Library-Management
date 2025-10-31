@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../Providers/AuthProvider";
 import { MdOutlineDarkMode } from "react-icons/md";
@@ -10,29 +10,55 @@ const Navbar = ({ handleTheme, theme }) => {
     const { user, logOut } = useContext(AuthContext);
     const [isAdmin, setIsAdmin] = useState(null);
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const retryTimeoutRef = useRef(null);
 
     useEffect(() => {
+        let retryCount = 0;
+        const maxRetries = 5;
+        
         const checkAdminStatus = async () => {
             if (user?.email) {
                 try {
                     const token = localStorage.getItem('access-token');
-                    const response = await axios.get(
-                        API_ENDPOINTS.CHECK_ADMIN(user.email),
-                        {
-                            headers: { Authorization: `Bearer ${token}` },
-                            withCredentials: true
-                        }
-                    );
-                    const adminStatus = response.data.data?.admin || false;
-                    setIsAdmin(adminStatus);
+                    // Wait a bit for token to be available after login
+                    if (!token && retryCount < maxRetries) {
+                        // If no token yet, wait and retry (max 5 times)
+                        retryCount++;
+                        retryTimeoutRef.current = setTimeout(() => checkAdminStatus(), 200);
+                        return;
+                    }
+                    
+                    if (token) {
+                        const response = await axios.get(
+                            API_ENDPOINTS.CHECK_ADMIN(user.email),
+                            {
+                                headers: { Authorization: `Bearer ${token}` },
+                                withCredentials: true
+                            }
+                        );
+                        const adminStatus = response.data.data?.admin || false;
+                        setIsAdmin(adminStatus);
+                    } else {
+                        setIsAdmin(false);
+                    }
                 } catch (error) {
                     console.error('Error checking admin status:', error);
                     setIsAdmin(false);
                 }
+            } else {
+                // Reset admin status when user logs out
+                setIsAdmin(null);
             }
         };
 
         checkAdminStatus();
+        
+        // Cleanup timeout on unmount or user change
+        return () => {
+            if (retryTimeoutRef.current) {
+                clearTimeout(retryTimeoutRef.current);
+            }
+        };
     }, [user]);
 
     const handleLogOut = () => {

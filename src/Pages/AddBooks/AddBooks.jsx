@@ -1,12 +1,55 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../../Providers/AuthProvider';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { API_ENDPOINTS } from '../../config/api';
+import axios from 'axios';
 
 const AddBooks = () => {
     const { user } = useContext(AuthContext);
+    const navigate = useNavigate();
     const [selectedCategory, setSelectedCategory] = useState('CSE');
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [checkingAdmin, setCheckingAdmin] = useState(true);
+
+    useEffect(() => {
+        const checkAdminStatus = async () => {
+            if (user?.email) {
+                try {
+                    const token = localStorage.getItem('access-token');
+                    if (token) {
+                        const response = await axios.get(
+                            API_ENDPOINTS.CHECK_ADMIN(user.email),
+                            {
+                                headers: { Authorization: `Bearer ${token}` },
+                                withCredentials: true
+                            }
+                        );
+                        const adminStatus = response.data.data?.admin || false;
+                        setIsAdmin(adminStatus);
+                        
+                        // Redirect admins away from this page
+                        if (adminStatus) {
+                            Swal.fire({
+                                title: 'Access Restricted',
+                                text: 'Admins cannot suggest books. Redirecting to dashboard...',
+                                icon: 'info',
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+                            setTimeout(() => navigate('/dashboard'), 2000);
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error checking admin status:', error);
+                    setIsAdmin(false);
+                }
+            }
+            setCheckingAdmin(false);
+        };
+
+        checkAdminStatus();
+    }, [user, navigate]);
     
     const categories = ['CSE', 'EEE', 'Civil', 'Non-Tech'];
 
@@ -85,6 +128,30 @@ const AddBooks = () => {
                 });
             });
     };
+
+    // Show loading or redirect message for admins
+    if (checkingAdmin) {
+        return (
+            <div className="flex justify-center items-center min-h-screen bg-gray-50 dark:bg-slate-800">
+                <div className="text-center">
+                    <div className="loading loading-spinner loading-lg"></div>
+                    <p className="mt-4 text-gray-600 dark:text-gray-300">Checking access...</p>
+                </div>
+            </div>
+        );
+    }
+
+    if (isAdmin) {
+        return (
+            <div className="flex justify-center items-center min-h-screen bg-gray-50 dark:bg-slate-800">
+                <div className="text-center">
+                    <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">Access Restricted</h2>
+                    <p className="text-gray-600 dark:text-gray-300 mb-6">Admins cannot suggest books.</p>
+                    <Link to="/dashboard" className="btn btn-primary">Go to Dashboard</Link>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-gray-50 dark:bg-slate-800">

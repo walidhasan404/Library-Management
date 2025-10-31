@@ -10,36 +10,65 @@ import LoadingSpinner from "../../Components/LoadingSpinner";
 
 const AllBooks = () => {
     const { user } = useContext(AuthContext);
-    const [books, setBooks] = useState([]);
+    const [allBooks, setAllBooks] = useState([]); // Store all books
+    const [books, setBooks] = useState([]); // Current page books
     const [view, setView] = useState('card');
     const [isAdmin, setIsAdmin] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-    const [pagination, setPagination] = useState({});
+    const [booksPerPage] = useState(9); // Items per page for client-side pagination
     const [loading, setLoading] = useState(false);
 
-    // Function to fetch books with pagination
-    const fetchBooks = async (page = 1) => {
+    // Function to update displayed books based on current page (client-side pagination)
+    const updateDisplayedBooks = (allBooksArray, page) => {
+        const startIndex = (page - 1) * booksPerPage;
+        const endIndex = startIndex + booksPerPage;
+        const paginatedBooks = allBooksArray.slice(startIndex, endIndex);
+        setBooks(paginatedBooks);
+        setCurrentPage(page);
+    };
+
+    // Function to fetch all books
+    const fetchAllBooks = async () => {
         setLoading(true);
         try {
-            const response = await fetch(`${API_ENDPOINTS.BOOKS}?page=${page}&limit=9`);
-            const data = await response.json();
+            // Fetch all books by requesting with a very high limit
+            let allBooksData = [];
+            let page = 1;
+            let hasMore = true;
             
-            console.log('API Response:', data); // Debug log
-            
-            if (data.success) {
-                const booksData = data.data.books || [];
-                const paginationData = data.data.pagination || {};
+            while (hasMore) {
+                const response = await fetch(`${API_ENDPOINTS.BOOKS}?page=${page}&limit=100`);
+                const data = await response.json();
                 
-                console.log('Books Data:', booksData); // Debug log
-                console.log('Pagination Data:', paginationData); // Debug log
-                
-                const transformedBooks = booksData.map(book => dataTransformers.transformBook(book));
-                setBooks(transformedBooks);
-                setPagination(paginationData);
-                setCurrentPage(page);
-            } else {
-                console.error('API returned success: false', data);
+                if (data.success && data.data.books) {
+                    const booksData = data.data.books || [];
+                    if (booksData.length === 0) {
+                        hasMore = false;
+                    } else {
+                        allBooksData = [...allBooksData, ...booksData];
+                        // Check if there are more pages
+                        const paginationData = data.data.pagination || {};
+                        if (!paginationData.hasNextPage || page >= 100) { // Safety limit
+                            hasMore = false;
+                        } else {
+                            page++;
+                        }
+                    }
+                } else {
+                    hasMore = false;
+                }
             }
+            
+            // Transform books and ensure uniqueness by _id
+            const transformedBooks = allBooksData.map(book => dataTransformers.transformBook(book));
+            
+            // Remove duplicates based on _id
+            const uniqueBooks = transformedBooks.filter((book, index, self) => 
+                index === self.findIndex(b => b._id === book._id)
+            );
+            
+            setAllBooks(uniqueBooks);
+            updateDisplayedBooks(uniqueBooks, 1);
         } catch (error) {
             console.error('Error fetching books:', error);
         } finally {
@@ -70,7 +99,7 @@ const AllBooks = () => {
         };
 
         checkAdminStatus();
-        fetchBooks(1); // Fetch first page
+        fetchAllBooks(); // Fetch all books
     }, [user]);
 
     const toggleView = () => {
@@ -78,12 +107,13 @@ const AllBooks = () => {
     };
 
     const handleSort = () => {
-        const sortedBooks = [...books].sort((a, b) => a.quantity - b.quantity);
-        setBooks(sortedBooks);
+        const sortedBooks = [...allBooks].sort((a, b) => a.quantity - b.quantity);
+        setAllBooks(sortedBooks);
+        updateDisplayedBooks(sortedBooks, currentPage);
     };
 
     const handlePageChange = (page) => {
-        fetchBooks(page);
+        updateDisplayedBooks(allBooks, page);
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
@@ -136,14 +166,14 @@ const AllBooks = () => {
                     )}
 
                     {/* Pagination */}
-                    {pagination?.totalPages > 1 && (
+                    {allBooks.length > booksPerPage && (
                         <div className="flex justify-center items-center mt-8 space-x-2">
                             {/* Previous Button */}
                             <button
-                                onClick={() => handlePageChange(pagination.prevPage)}
-                                disabled={!pagination.hasPrevPage}
+                                onClick={() => handlePageChange(currentPage - 1)}
+                                disabled={currentPage === 1}
                                 className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                                    pagination.hasPrevPage
+                                    currentPage > 1
                                         ? 'bg-blue-600 text-white hover:bg-blue-700'
                                         : 'bg-gray-300 dark:bg-slate-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
                                 }`}
@@ -152,12 +182,12 @@ const AllBooks = () => {
                             </button>
 
                             {/* Page Numbers */}
-                            {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map((pageNum) => (
+                            {Array.from({ length: Math.ceil(allBooks.length / booksPerPage) }, (_, i) => i + 1).map((pageNum) => (
                                 <button
                                     key={pageNum}
                                     onClick={() => handlePageChange(pageNum)}
                                     className={`px-3 py-2 rounded-lg font-medium transition-all duration-200 ${
-                                        pageNum === pagination.currentPage
+                                        pageNum === currentPage
                                             ? 'bg-blue-600 text-white'
                                             : 'bg-gray-200 dark:bg-slate-600 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-slate-500'
                                     }`}
@@ -168,10 +198,10 @@ const AllBooks = () => {
 
                             {/* Next Button */}
                             <button
-                                onClick={() => handlePageChange(pagination.nextPage)}
-                                disabled={!pagination.hasNextPage}
+                                onClick={() => handlePageChange(currentPage + 1)}
+                                disabled={currentPage >= Math.ceil(allBooks.length / booksPerPage)}
                                 className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                                    pagination.hasNextPage
+                                    currentPage < Math.ceil(allBooks.length / booksPerPage)
                                         ? 'bg-blue-600 text-white hover:bg-blue-700'
                                         : 'bg-gray-300 dark:bg-slate-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
                                 }`}
@@ -182,11 +212,11 @@ const AllBooks = () => {
                     )}
 
                     {/* Pagination Info */}
-                    {pagination?.totalBooks && (
+                    {allBooks.length > 0 && (
                         <div className="text-center mt-4 text-gray-600 dark:text-gray-400">
-                            Showing {books.length} of {pagination.totalBooks} books
-                            {pagination?.totalPages > 1 && (
-                                <span> • Page {pagination.currentPage} of {pagination.totalPages}</span>
+                            Showing {books.length} of {allBooks.length} books
+                            {allBooks.length > booksPerPage && (
+                                <span> • Page {currentPage} of {Math.ceil(allBooks.length / booksPerPage)}</span>
                             )}
                         </div>
                     )}
